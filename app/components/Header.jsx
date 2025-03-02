@@ -1,16 +1,110 @@
 import {Suspense} from 'react';
-import {Await, NavLink, useAsyncValue} from '@remix-run/react';
+import {Await, Link, NavLink, useAsyncValue} from '@remix-run/react';
 import {useAnalytics, useOptimisticCart} from '@shopify/hydrogen';
+
 import {useAside} from '~/components/Aside';
+import logo from '~/assets/tillys-logo.svg';
+import discoverYourStyle from '~/assets/discover-your-style.webp';
 
 /**
  * @param {HeaderProps}
  */
 export function Header({header, isLoggedIn, cart, publicStoreDomain}) {
   const {shop, menu} = header;
+  const {close} = useAside();
+
   return (
-    <header className="header">
-      <NavLink prefetch="intent" to="/" style={activeLinkStyle} end>
+    <header>
+      {/* Top Black Bar */}
+      <div className='bg-black w-full h-[42px]'></div>
+
+      {/* Announcement Bar */}
+      <div className='flex items-center justify-between px-[16px] py-[5px]'>
+        <p className='text-[12px]'>
+          FREE SHIPPING on orders over $59* <span className='underline'>details</span>
+        </p>
+
+        <div className='flex items-center gap-4 text-[12px]'>
+          <Link to="/account">
+            Sign In
+          </Link>
+
+          <Link to="/rewards">
+            Join Rewards
+          </Link>
+
+          <Link to="/orders/track">
+            Track Order
+          </Link>
+
+          <Link to="/stores/northshore-mall">
+            Your Store: Northshore Mall
+          </Link>
+        </div>
+      </div>
+
+      {/* Main */}
+      <div className='flex items-center justify-between px-[16px] py-[5px]'>
+        <Link to="/">
+          <h1>
+            <img 
+              className='w-[205px] h-[52px]'
+              src={logo} 
+              alt="Tillys Logo" 
+            />
+          </h1>
+        </Link>
+
+        <Link to="/">
+          <img 
+            className='w-[200px] h-auto'
+            src={discoverYourStyle} 
+            alt="Discover Your Style" 
+          />
+        </Link>
+
+        <div className='flex items-center'>
+          <div>
+            Search here...
+          </div>
+
+          <Suspense fallback={<CartBadge count={null} />}>
+            <Await resolve={cart}>
+              <CartBanner />
+            </Await>
+          </Suspense>
+        </div>
+      </div>
+
+      <nav className='flex items-center gap-4 pr-[16px] ' role="navigation">
+        {(menu || FALLBACK_HEADER_MENU).items.map((item) => {
+          if (!item.url) return null;
+
+          // if the url is internal, we strip the domain
+          const url =
+            item.url.includes('myshopify.com') ||
+            item.url.includes(publicStoreDomain) ||
+            item.url.includes(primaryDomainUrl)
+              ? new URL(item.url).pathname
+              : item.url;
+          return (
+            <NavLink
+              className="header-menu-item px-[16px] py-[10px] text-[14px]"
+              end
+              key={item.id}
+              onClick={close}
+              prefetch="intent"
+              to={url}
+            >
+              {item.title}
+            </NavLink>
+          );
+        })}
+
+        <SearchToggle />
+      </nav>
+      
+      {/* <NavLink prefetch="intent" to="/" style={activeLinkStyle} end>
         <strong>{shop.name}</strong>
       </NavLink>
       <HeaderMenu
@@ -19,7 +113,7 @@ export function Header({header, isLoggedIn, cart, publicStoreDomain}) {
         primaryDomainUrl={header.shop.primaryDomain.url}
         publicStoreDomain={publicStoreDomain}
       />
-      <HeaderCtas isLoggedIn={isLoggedIn} cart={cart} />
+      <HeaderCtas isLoggedIn={isLoggedIn} cart={cart} /> */}
     </header>
   );
 }

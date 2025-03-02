@@ -1,26 +1,171 @@
 import {Suspense} from 'react';
-import {Await, NavLink} from '@remix-run/react';
+import {Await, Link, NavLink} from '@remix-run/react';
 
 /**
  * @param {FooterProps}
  */
 export function Footer({footer: footerPromise, header, publicStoreDomain}) {
   return (
-    <Suspense>
-      <Await resolve={footerPromise}>
-        {(footer) => (
-          <footer className="footer">
-            {footer?.menu && header.shop.primaryDomain?.url && (
-              <FooterMenu
-                menu={footer.menu}
-                primaryDomainUrl={header.shop.primaryDomain.url}
-                publicStoreDomain={publicStoreDomain}
-              />
-            )}
-          </footer>
-        )}
-      </Await>
-    </Suspense>
+    <div className='mt-[50px]'>
+
+      {/* Main */}
+      <div className='flex justify-between pt-[60px] pb-[30px] px-[16px] bg-[#f5f5f5]'>
+        {/* Nav Column 1 */}
+        <div className='flex flex-col gap-[15px]'>
+          <h2 className='text-[16px] font-bold mb-0.5'>
+            For You
+          </h2>
+
+          <Link to="/">
+            Favorites
+          </Link>
+
+          <Link to="/">
+            Gift Cards
+          </Link>
+
+          <Link to="/">
+            Afterpay
+          </Link>
+
+          <Link to="/">
+            Tillys Rewards
+          </Link>
+
+          <Link to="/">
+            Student Discount
+          </Link>
+
+          <Link to="/">
+            Blog
+          </Link>
+        </div>
+
+        {/* Nav Column 2 */}
+        <div className='flex flex-col gap-[15px]'>
+          <h2 className='text-[16px] font-bold mb-0.5'>
+            Guest Services
+          </h2>
+
+          <Link to="/">
+            Order Status
+          </Link>
+
+          <Link to="/">
+            Returns & Exchanges
+          </Link>
+
+          <Link to="/">
+            Billing
+          </Link>
+
+          <Link to="/">
+            Shipping
+          </Link>
+
+          <Link to="/">
+            Same Day Delivery
+          </Link>
+        </div>
+
+        {/* Nav Column 3 */}
+        <div className='flex flex-col gap-[15px]'>
+          <h2 className='text-[16px] font-bold mb-0.5'>
+            Company
+          </h2>
+
+          <Link to="/">
+            About Us
+          </Link>
+
+          <Link to="/">
+            Careers
+          </Link>
+
+          <Link to="/">
+            Investor Relations
+          </Link>
+
+          <Link to="/">
+            We Care
+          </Link>
+
+          <Link to="/">
+            Tilly's Life Center
+          </Link>
+
+          <Link to="/">
+            Affiliate
+          </Link>
+
+          <Link to="/">
+            Trending Searches
+          </Link>
+
+          <Link to="/">
+            Trending Products
+          </Link>
+        </div>
+
+        <div className='flex flex-col gap-[15px]'>
+          <h2 className='text-[16px] font-bold'>
+            Find a Store
+          </h2>
+        </div>
+
+        <div className='flex flex-col gap-[15px]'>
+          <h2 className='text-[16px] font-bold'>
+            Connect with Us
+          </h2>
+        </div>
+      </div>
+
+      {/* Bottom */}
+      <div className='flex flex-col items-center justify-center gap-[16px] bg-black text-white pt-[28px] pb-[16px] px-[16px]'>
+        <nav className='flex items-center gap-[14px]'>
+          <Link 
+            className='text-[13px] text-white'
+            to="/"
+          >
+            Terms of Use
+          </Link>
+
+          <Link
+            className='text-[13px] text-white'
+            to="/"
+          >
+            Privacy Policy
+          </Link>
+
+          <Link 
+            className='text-[13px] text-white'
+            to="/"
+          >
+            Cookie Policy
+          </Link>
+        </nav>
+
+        <p className='text-[13px]'>
+          &copy; 2025 Tillys All Rights Reserved
+        </p>
+      </div>
+    </div>
+    
+    // <Suspense>
+    //   <Await resolve={footerPromise}>
+    //     {(footer) => (
+    //       <footer className="footer">
+    //         {footer?.menu && header.shop.primaryDomain?.url && (
+    //           <FooterMenu
+    //             menu={footer.menu}
+    //             primaryDomainUrl={header.shop.primaryDomain.url}
+    //             publicStoreDomain={publicStoreDomain}
+    //           />
+    //         )}
+    //       </footer>
+    //     )}
+    //   </Await>
+    // </Suspense>
   );
 }
 
