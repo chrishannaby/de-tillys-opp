@@ -11,15 +11,19 @@ import {useAside} from './Aside';
 export function ProductForm({productOptions, selectedVariant}) {
   const navigate = useNavigate();
   const {open} = useAside();
+
   return (
-    <div className="product-form">
+    <div className="product-form mt-[8px]">
       {productOptions.map((option) => {
         // If there is only a single value in the option values, don't display the option
         if (option.optionValues.length === 1) return null;
 
         return (
-          <div className="product-options" key={option.name}>
-            <h5>{option.name}</h5>
+          <div className="product-options pt-[16px]" key={option.name}>
+            <h5 className="text-[14px] font-[700] mb-[20px]">
+              {option.name}
+            </h5>
+
             <div className="product-options-grid">
               {option.optionValues.map((value) => {
                 const {

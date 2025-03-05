@@ -416,7 +416,6 @@ button.reset:hover:not(:has(> *)) {
   display: grid;
   @media (min-width: 45em) {
     grid-template-columns: 1fr 1fr;
-    grid-gap: 4rem;
   }
 }
 
