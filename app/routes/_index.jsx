@@ -2,7 +2,9 @@ import {Await, useLoaderData, Link} from '@remix-run/react';
 import {Suspense} from 'react';
 import {Image, Money} from '@shopify/hydrogen';
 
+import {PromoBanner} from '~/sections/promo-banner';
 import {TriBanner} from '~/sections/tri-banner';
+import {ImageBanner} from '~/sections/image-banner';
 
 /**
  * @type {MetaFunction}
@@ -65,7 +67,10 @@ export default function Homepage() {
   const data = useLoaderData();
   return (
     <div className="home">
+      <PromoBanner />
       <TriBanner />
+      <ImageBanner />
+
       <FeaturedCollection collection={data.featuredCollection} />
       <RecommendedProducts products={data.recommendedProducts} />
     </div>

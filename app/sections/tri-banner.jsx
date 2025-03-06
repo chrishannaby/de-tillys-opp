@@ -1,6 +1,6 @@
 export function TriBanner() {
   return (
-    <section className="flex gap-[16px] container mx-auto mt-[35px] mb-[25px]">
+    <section className="flex gap-[16px] container mx-auto pt-[35px] pb-[25px]">
       {/* Image 1 */}
       <div className="flex-[1] w-[33%] h-[800px]">
         <a href="/" className="relative w-full">
