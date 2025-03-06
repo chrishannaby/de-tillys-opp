@@ -1,10 +1,16 @@
-import {Suspense} from 'react';
+import {Suspense, useId} from 'react';
 import {Await, Link, NavLink, useAsyncValue} from '@remix-run/react';
 import {useAnalytics, useOptimisticCart} from '@shopify/hydrogen';
 
+import {
+  SEARCH_ENDPOINT,
+  SearchFormPredictive,
+} from '~/components/SearchFormPredictive';
+import {SearchResultsPredictive} from '~/components/SearchResultsPredictive';
 import {useAside} from '~/components/Aside';
 import logo from '~/assets/tillys-logo.svg';
 import discoverYourStyle from '~/assets/discover-your-style.webp';
+import bagIcon from '~/assets/bag-icon.svg';
 
 /**
  * @param {HeaderProps}
@@ -12,9 +18,23 @@ import discoverYourStyle from '~/assets/discover-your-style.webp';
 export function Header({header, isLoggedIn, cart, publicStoreDomain}) {
   const {shop, menu} = header;
   const {close} = useAside();
+  const queriesDatalistId = useId();
 
   return (
-    <header>
+    <header className="sticky top-0 z-1 bg-white">
+      <style jsx>{`
+        header::after {
+          content: '';
+          position: absolute;
+          left: 0;
+          top: 100%;
+          height: 8px;
+          width: 100%;
+          background: linear-gradient(rgba(0, 0, 0, 0.1), transparent);
+        }
+      `}
+      </style>
+
       {/* Top Black Bar */}
       <div className='bg-black w-full h-[42px]'></div>
 
@@ -44,8 +64,11 @@ export function Header({header, isLoggedIn, cart, publicStoreDomain}) {
       </div>
 
       {/* Main */}
-      <div className='flex items-center justify-between px-[16px] py-[5px]'>
-        <Link to="/">
+      <div className='grid grid-cols-3 items-center justify-items-center px-[16px] py-[5px]'>
+        <Link 
+          to="/"
+          className='mr-auto'
+        >
           <h1>
             <img 
               className='w-[205px] h-[52px]'
@@ -55,18 +78,44 @@ export function Header({header, isLoggedIn, cart, publicStoreDomain}) {
           </h1>
         </Link>
 
-        <Link to="/">
+        <Link 
+          to="/"
+          className='w-[200px] h-auto'
+        >
           <img 
-            className='w-[200px] h-auto'
+            className='w-full h-full'
             src={discoverYourStyle} 
             alt="Discover Your Style" 
           />
         </Link>
 
-        <div className='flex items-center'>
-          <div>
-            Search here...
-          </div>
+        <div className='flex items-center justify-end gap-[15px] w-full'>
+          <SearchFormPredictive className='relative w-fit h-[40px]'>
+            {({fetchResults, goToSearch, inputRef}) => (
+              <>
+                <input
+                  name="q"
+                  onChange={fetchResults}
+                  onFocus={fetchResults}
+                  placeholder="Search"
+                  ref={inputRef}
+                  type="search"
+                  list={queriesDatalistId}
+                  className='py-[10px] px-[40px] bg-[#f5f5f5] border-none outline-none rounded-[800px] overflow-hidden placeholder:text-[#757575]'
+                />
+
+                &nbsp;
+                <button 
+                  onClick={goToSearch}
+                  className='absolute left-[10px] top-1/2 -translate-y-1/2 flex items-center justify-center'
+                >
+                  <svg className='h-[18px] w-[18px]' xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="#757575">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+                  </svg>
+                </button>
+              </>
+            )}
+          </SearchFormPredictive>
 
           <Suspense fallback={<CartBadge count={null} />}>
             <Await resolve={cart}>
@@ -76,7 +125,10 @@ export function Header({header, isLoggedIn, cart, publicStoreDomain}) {
         </div>
       </div>
 
-      <nav className='flex items-center gap-4 pr-[16px] ' role="navigation">
+      <nav 
+        className='flex items-center gap-4 pr-[16px] border-t border-[#C4BFC1]'
+        role="navigation"
+      >
         {(menu || FALLBACK_HEADER_MENU).items.map((item) => {
           if (!item.url) return null;
 
@@ -227,18 +279,21 @@ function CartBadge({count}) {
   return (
     <a
       href="/cart"
-      onClick={(e) => {
-        e.preventDefault();
-        open('cart');
-        publish('cart_viewed', {
-          cart,
-          prevCart,
-          shop,
-          url: window.location.href || '',
-        });
-      }}
+      // onClick={(e) => {
+      //   e.preventDefault();
+      //   open('cart');
+      // }}
+      className='relative flex items-center justify-center w-[28px] h-[28px]'
     >
-      Cart {count === null ? <span>&nbsp;</span> : count}
+      <img 
+        src={bagIcon}
+        alt="Cart Icon"
+        className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[28px] h-[28px]'
+      />
+
+      <span className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 mt-[4px] text-[12px] font-[400]'>
+        {count === null ? '0' : count}
+      </span>
     </a>
   );
 }
