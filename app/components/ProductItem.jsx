@@ -4,6 +4,7 @@ import {
   Money,
 } from '@shopify/hydrogen';
 import {useVariantUrl} from '~/lib/variants';
+import {useState} from 'react';
 
 /**
  * @param {{
@@ -12,6 +13,7 @@ import {useVariantUrl} from '~/lib/variants';
  * }}
  */
 export function ProductItem({product, loading}) {
+  const [isHovered, setIsHovered] = useState(false);
   const variantUrl = useVariantUrl(product.handle);
 
   // Get color options with their swatches
@@ -24,22 +26,46 @@ export function ProductItem({product, loading}) {
     swatch: value.swatch
   })).filter(swatch => swatch.swatch !== null);
 
+  // Get the second image if it exists
+  const secondImage = product.images?.nodes?.[1];
+  const hasSecondImage = !!secondImage;
+
   return (
     <Link
-      className="product-item"
+      className="product-item relative"
       key={product.id}
       prefetch="intent"
       to={variantUrl}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
     >
-      {product.featuredImage && (
-        <Image
-          alt={product.featuredImage.altText || product.title}
-          aspectRatio="4/5"
-          data={product.featuredImage}
-          loading={loading}
-          sizes="(min-width: 45em) 400px, 100vw"
-        />
-      )}
+      <div className="relative">
+        {product.featuredImage && (
+          <Image
+            alt={product.featuredImage.altText || product.title}
+            aspectRatio="4/5"
+            data={product.featuredImage}
+            loading={loading}
+            sizes="(min-width: 45em) 400px, 100vw"
+            className={`transition-opacity duration-200 ${
+              isHovered && hasSecondImage ? 'opacity-0' : 'opacity-100'
+            }`}
+          />
+        )}
+        
+        {hasSecondImage && (
+          <Image
+            alt={secondImage.altText || product.title}
+            aspectRatio="4/5"
+            data={secondImage}
+            loading={loading}
+            sizes="(min-width: 45em) 400px, 100vw"
+            className={`absolute top-0 left-0 w-full h-full transition-opacity duration-200 ${
+              isHovered ? 'opacity-100' : 'opacity-0'
+            }`}
+          />
+        )}
+      </div>
 
       <div className='mt-[15px] mb-[16px]'>
         <h4 className='text-[12px] font-[400]'>
