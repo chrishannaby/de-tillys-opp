@@ -9,7 +9,7 @@ import {useAside} from './Aside';
  *   selectedVariant: ProductFragment['selectedOrFirstAvailableVariant'];
  * }}
  */
-export function ProductForm({productOptions, selectedVariant, descriptionHtml}) {
+export function ProductForm({product, productOptions, selectedVariant, descriptionHtml}) {
   const navigate = useNavigate();
   const {open} = useAside();
 
@@ -164,7 +164,9 @@ export function ProductForm({productOptions, selectedVariant, descriptionHtml}) 
         >
           <div className='flex items-center gap-[10px]'>
             <span className="text-[14px] font-[700]">Product Details</span>
-            <span className='text-[13px] font-[700] text-[#757575]'>item no.</span>
+            <span className='text-[13px] font-[700] text-[#757575]'>
+              item no. {product.id.replace('gid://shopify/Product/', '')}
+            </span>
           </div>
           
           <svg 
