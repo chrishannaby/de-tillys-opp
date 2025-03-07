@@ -73,14 +73,13 @@ export function ProductForm({product, productOptions, selectedVariant, descripti
                   return (
                     <button
                       type="button"
-                      className={`product-options-item${
+                      className={`min-w-[85px] py-[13px] px-0 border border-black rounded-[3px] text-[14px] product-options-item${
                         exists && !selected ? ' link' : ''
                       }`}
                       key={option.name + name}
                       style={{
-                        border: selected
-                          ? '1px solid black'
-                          : '1px solid transparent',
+                        backgroundColor: selected ? '#000' : 'transparent',
+                        color: selected ? '#fff' : '#000',
                         opacity: available ? 1 : 0.3,
                       }}
                       disabled={!exists}

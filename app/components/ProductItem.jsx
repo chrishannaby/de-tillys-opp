@@ -14,6 +14,13 @@ import {useVariantUrl} from '~/lib/variants';
 export function ProductItem({product, loading}) {
   const variantUrl = useVariantUrl(product.handle);
 
+  // Get unique color options
+  const colorOptions = product.variants?.nodes
+    ?.map(variant => variant.selectedOptions.find(opt => opt.name.toLowerCase() === 'color')?.value)
+    .filter((color, index, self) => color && self.indexOf(color) === index);
+
+  console.log(product);
+
   return (
     <Link
       className="product-item"
@@ -39,6 +46,19 @@ export function ProductItem({product, loading}) {
         <small>
           <Money data={product.priceRange.minVariantPrice} />
         </small>
+
+        {colorOptions && colorOptions.length > 0 && (
+          <div className="flex gap-2 mt-2">
+            {colorOptions.map((color) => (
+              <div
+                key={color}
+                className="w-4 h-4 rounded-full border border-gray-300"
+                style={{backgroundColor: color.toLowerCase()}}
+                title={color}
+              />
+            ))}
+          </div>
+        )}
       </div>
     </Link>
   );

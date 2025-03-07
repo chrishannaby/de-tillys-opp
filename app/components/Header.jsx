@@ -51,7 +51,7 @@ export function Header({header, isLoggedIn, cart, publicStoreDomain}) {
           </div>
         </div>
       </div>
-      
+
       <header className="sticky top-0 z-1 bg-white">
         <style jsx>{`
           header::after {
@@ -155,8 +155,6 @@ export function Header({header, isLoggedIn, cart, publicStoreDomain}) {
               </NavLink>
             );
           })}
-
-          <SearchToggle />
         </nav>
         
         {/* <NavLink prefetch="intent" to="/" style={activeLinkStyle} end>

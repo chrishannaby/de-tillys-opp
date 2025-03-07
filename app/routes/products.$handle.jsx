@@ -1,4 +1,4 @@
-import {useLoaderData} from '@remix-run/react';
+import {useLoaderData, Link} from '@remix-run/react';
 import {
   getSelectedProductOptions,
   Analytics,
@@ -104,15 +104,15 @@ export default function Product() {
   return (
     <div className="container mx-auto">
       <div className="flex items-center gap-[8px] text-[11px] font-[400] py-[20px] px-[8px]">
-        <a href="/">
+        <Link to="/">
           Home
-        </a>
+        </Link>
 
         /
 
-        <a href="/collections/all">
+        <Link to="/collections/all">
           Collection
-        </a>
+        </Link>
 
         /
 

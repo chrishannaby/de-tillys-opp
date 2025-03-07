@@ -84,9 +84,9 @@ export default function Collection() {
               All
             </h1>
 
-            <span className='text-[14px] font-[400] text-[#757575]'>
+            {/* <span className='text-[14px] font-[400] text-[#757575]'>
               {products.nodes.length} Product(s)
-            </span>
+            </span> */}
           </div>
 
           {/* Breadcrumbs */}
@@ -196,6 +196,14 @@ const CATALOG_QUERY = `#graphql
     ) {
       nodes {
         ...ProductItem
+        variants(first: 10) {
+          nodes {
+            selectedOptions {
+              name
+              value
+            }
+          }
+        }
       }
       pageInfo {
         hasPreviousPage
