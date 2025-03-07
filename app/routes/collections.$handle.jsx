@@ -2,12 +2,10 @@ import {redirect} from '@shopify/remix-oxygen';
 import {useLoaderData, Link} from '@remix-run/react';
 import {
   getPaginationVariables,
-  Image,
-  Money,
   Analytics,
 } from '@shopify/hydrogen';
-import {useVariantUrl} from '~/lib/variants';
 import {PaginatedResourceSection} from '~/components/PaginatedResourceSection';
+import {ProductItem} from '~/components/ProductItem';
 
 /**
  * @type {MetaFunction<typeof loader>}
@@ -78,9 +76,40 @@ export default function Collection() {
   const {collection} = useLoaderData();
 
   return (
-    <div className="collection">
-      <h1>{collection.title}</h1>
-      <p className="collection-description">{collection.description}</p>
+    <div className="container mx-auto mt-[16px] mb-[30px]">
+
+      {/* Header */}
+      <div className='flex items-center justify-between mb-[10px] pb-[25px]'>
+        {/* Left */}
+        <div className='flex flex-col'>
+          <div className='flex items-center gap-[10px]'>
+            <h1 className='text-[20px] font-bold'>
+              {collection.title}
+            </h1>
+          </div>
+
+          {/* Breadcrumbs */}
+          <div className='flex items-center gap-[8px] text-[11px] font-[400]'>
+            <Link to="/">
+              Home
+            </Link>
+
+            <span>
+              /
+            </span>
+
+            <Link to={`/collections/${collection.handle}`}>
+              {collection.title}
+            </Link>
+          </div>
+        </div>
+
+        {/* Right */}
+        <div className='flex items-center gap-[10px]'>
+          Sorting
+        </div>
+      </div>
+
       <PaginatedResourceSection
         connection={collection.products}
         resourcesClassName="products-grid"
@@ -102,38 +131,6 @@ export default function Collection() {
         }}
       />
     </div>
-  );
-}
-
-/**
- * @param {{
- *   product: ProductItemFragment;
- *   loading?: 'eager' | 'lazy';
- * }}
- */
-function ProductItem({product, loading}) {
-  const variantUrl = useVariantUrl(product.handle);
-  return (
-    <Link
-      className="product-item"
-      key={product.id}
-      prefetch="intent"
-      to={variantUrl}
-    >
-      {product.featuredImage && (
-        <Image
-          alt={product.featuredImage.altText || product.title}
-          aspectRatio="4/5"
-          data={product.featuredImage}
-          loading={loading}
-          sizes="(min-width: 45em) 400px, 100vw"
-        />
-      )}
-      <h4>{product.title}</h4>
-      <small>
-        <Money data={product.priceRange.minVariantPrice} />
-      </small>
-    </Link>
   );
 }
 
