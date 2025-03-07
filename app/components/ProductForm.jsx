@@ -107,9 +107,9 @@ export function ProductForm({product, productOptions, selectedVariant, descripti
 
       <AddToCartButton
         disabled={!selectedVariant || !selectedVariant.availableForSale}
-        onClick={() => {
-          open('cart');
-        }}
+        // onClick={() => {
+        //   open('cart');
+        // }}
         className='w-full'
         lines={
           selectedVariant
