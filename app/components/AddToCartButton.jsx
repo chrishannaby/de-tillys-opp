@@ -17,7 +17,12 @@ export function AddToCartButton({
   onClick,
 }) {
   return (
-    <CartForm route="/cart" inputs={{lines}} action={CartForm.ACTIONS.LinesAdd}>
+    <CartForm 
+      route="/cart" 
+      inputs={{lines}} 
+      action={CartForm.ACTIONS.LinesAdd}
+      className='w-full'
+    >
       {(fetcher) => (
         <>
           <input
@@ -28,6 +33,7 @@ export function AddToCartButton({
           <button
             type="submit"
             onClick={onClick}
+            className='bg-black w-full text-white my-[16px] py-[13px] px-[24px] text-center text-[14px] font-[700] rounded-[3px] cursor-pointer'
             disabled={disabled ?? fetcher.state !== 'idle'}
           >
             {children}

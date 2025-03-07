@@ -1,4 +1,5 @@
 import {Link, useNavigate} from '@remix-run/react';
+import {useState} from 'react';
 import {AddToCartButton} from './AddToCartButton';
 import {useAside} from './Aside';
 
@@ -8,9 +9,12 @@ import {useAside} from './Aside';
  *   selectedVariant: ProductFragment['selectedOrFirstAvailableVariant'];
  * }}
  */
-export function ProductForm({productOptions, selectedVariant}) {
+export function ProductForm({productOptions, selectedVariant, descriptionHtml}) {
   const navigate = useNavigate();
   const {open} = useAside();
+
+  const [isReviewsAccordionOpen, setIsReviewsAccordionOpen] = useState(true);
+  const [isDescriptionAccordionOpen, setIsDescriptionAccordionOpen] = useState(true);
 
   return (
     <div className="product-form mt-[8px]">
@@ -99,11 +103,15 @@ export function ProductForm({productOptions, selectedVariant}) {
           </div>
         );
       })}
+
+      <div className='w-full border-t border-[#C4BFC1] mt-[16px] pt-[16px]'></div>
+
       <AddToCartButton
         disabled={!selectedVariant || !selectedVariant.availableForSale}
         onClick={() => {
           open('cart');
         }}
+        className='w-full'
         lines={
           selectedVariant
             ? [
@@ -118,6 +126,62 @@ export function ProductForm({productOptions, selectedVariant}) {
       >
         {selectedVariant?.availableForSale ? 'Add to cart' : 'Sold out'}
       </AddToCartButton>
+
+      {/* Reviews Accordion */}
+      <div className="border-t border-[#C4BFC1] mt-[16px] pt-[16px]">
+        <button 
+          className="w-full flex justify-between items-center pb-[10px] cursor-pointer"
+          onClick={() => setIsReviewsAccordionOpen(!isReviewsAccordionOpen)}
+        >
+          <span className="text-[14px] font-[700]">Reviews</span>
+
+          <svg 
+            className={`w-[12px] h-[12px] transition-transform ${isReviewsAccordionOpen ? 'rotate-180' : ''}`}
+            viewBox="0 0 12 12" 
+            fill="none"
+          >
+            <path d="M2 4L6 8L10 4" stroke="black" strokeWidth="1.5"/>
+          </svg>
+        </button>
+        
+        <div className={`overflow-hidden transition-all ${isReviewsAccordionOpen ? 'max-h-[500px]' : 'max-h-0'}`}>
+          <div className="flex flex-col pb-[16px] text-[14px] pt-[10px]">
+            <p className='underline text-[14px] font-[400]'>
+              Be the first to write a review
+            </p>
+            <p className='text-[14px] font-[400]'>
+              | <span className='underline'>Be the first to ask a question</span>
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Description Accordion */}
+      <div className="border-t border-[#C4BFC1] mt-[16px] pt-[16px]">
+        <button 
+          className="w-full flex justify-between items-center pb-[10px] cursor-pointer"
+          onClick={() => setIsDescriptionAccordionOpen(!isDescriptionAccordionOpen)}
+        >
+          <div className='flex items-center gap-[10px]'>
+            <span className="text-[14px] font-[700]">Product Details</span>
+            <span className='text-[13px] font-[700] text-[#757575]'>item no.</span>
+          </div>
+          
+          <svg 
+            className={`w-[12px] h-[12px] transition-transform ${isDescriptionAccordionOpen ? 'rotate-180' : ''}`}
+            viewBox="0 0 12 12" 
+            fill="none"
+          >
+            <path d="M2 4L6 8L10 4" stroke="black" strokeWidth="1.5"/>
+          </svg>
+        </button>
+        
+        <div className={`overflow-hidden transition-all ${isDescriptionAccordionOpen ? 'max-h-[500px]' : 'max-h-0'}`}>
+          <div className="pb-[16px] text-[14px]">
+            <div dangerouslySetInnerHTML={{__html: descriptionHtml}} />
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

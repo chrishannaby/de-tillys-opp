@@ -102,7 +102,7 @@ export default function Product() {
   const {title, descriptionHtml} = product;
 
   return (
-    <div>
+    <div className="container mx-auto">
       <div className="flex items-center gap-[8px] text-[11px] font-[400] py-[20px] px-[8px]">
         <a href="/">
           Home
@@ -135,11 +135,8 @@ export default function Product() {
           <ProductForm
             productOptions={productOptions}
             selectedVariant={selectedVariant}
+            descriptionHtml={descriptionHtml}
           />
-          <p>
-            <strong>Description</strong>
-          </p>
-          <div dangerouslySetInnerHTML={{__html: descriptionHtml}} />
         </div>
         <Analytics.ProductView
           data={{
