@@ -21,152 +21,156 @@ export function Header({header, isLoggedIn, cart, publicStoreDomain}) {
   const queriesDatalistId = useId();
 
   return (
-    <header className="sticky top-0 z-1 bg-white">
-      <style jsx>{`
-        header::after {
-          content: '';
-          position: absolute;
-          left: 0;
-          top: 100%;
-          height: 8px;
-          width: 100%;
-          background: linear-gradient(rgba(0, 0, 0, 0.1), transparent);
-        }
-      `}
-      </style>
+    <>
+      <div>
+        {/* Top Black Bar */}
+        <div className='bg-black w-full h-[42px]'></div>
 
-      {/* Top Black Bar */}
-      <div className='bg-black w-full h-[42px]'></div>
+        {/* Announcement Bar */}
+        <div className='flex items-center justify-between px-[16px] py-[5px]'>
+          <p className='text-[12px]'>
+            FREE SHIPPING on orders over $59* <span className='underline'>details</span>
+          </p>
 
-      {/* Announcement Bar */}
-      <div className='flex items-center justify-between px-[16px] py-[5px]'>
-        <p className='text-[12px]'>
-          FREE SHIPPING on orders over $59* <span className='underline'>details</span>
-        </p>
+          <div className='flex items-center gap-4 text-[12px]'>
+            <Link to="/account">
+              Sign In
+            </Link>
 
-        <div className='flex items-center gap-4 text-[12px]'>
-          <Link to="/account">
-            Sign In
-          </Link>
+            <Link to="/rewards">
+              Join Rewards
+            </Link>
 
-          <Link to="/rewards">
-            Join Rewards
-          </Link>
+            <Link to="/orders/track">
+              Track Order
+            </Link>
 
-          <Link to="/orders/track">
-            Track Order
-          </Link>
-
-          <Link to="/stores/northshore-mall">
-            Your Store: Northshore Mall
-          </Link>
+            <Link to="/stores/northshore-mall">
+              Your Store: Northshore Mall
+            </Link>
+          </div>
         </div>
       </div>
-
-      {/* Main */}
-      <div className='grid grid-cols-3 items-center justify-items-center px-[16px] py-[5px]'>
-        <Link 
-          to="/"
-          className='mr-auto'
-        >
-          <h1>
-            <img 
-              className='w-[205px] h-[52px]'
-              src={logo} 
-              alt="Tillys Logo" 
-            />
-          </h1>
-        </Link>
-
-        <Link 
-          to="/"
-          className='w-[200px] h-auto'
-        >
-          <img 
-            className='w-full h-full'
-            src={discoverYourStyle} 
-            alt="Discover Your Style" 
-          />
-        </Link>
-
-        <div className='flex items-center justify-end gap-[15px] w-full'>
-          <SearchFormPredictive className='relative w-fit h-[40px]'>
-            {({fetchResults, goToSearch, inputRef}) => (
-              <>
-                <input
-                  name="q"
-                  onChange={fetchResults}
-                  onFocus={fetchResults}
-                  placeholder="Search"
-                  ref={inputRef}
-                  type="search"
-                  list={queriesDatalistId}
-                  className='py-[10px] px-[40px] bg-[#f5f5f5] border-none outline-none rounded-[800px] overflow-hidden placeholder:text-[#757575]'
-                />
-
-                &nbsp;
-                <button 
-                  onClick={goToSearch}
-                  className='absolute left-[10px] top-1/2 -translate-y-1/2 flex items-center justify-center'
-                >
-                  <svg className='h-[18px] w-[18px]' xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="#757575">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
-                  </svg>
-                </button>
-              </>
-            )}
-          </SearchFormPredictive>
-
-          <Suspense fallback={<CartBadge count={null} />}>
-            <Await resolve={cart}>
-              <CartBanner />
-            </Await>
-          </Suspense>
-        </div>
-      </div>
-
-      <nav 
-        className='flex items-center gap-4 pr-[16px] border-t border-[#C4BFC1]'
-        role="navigation"
-      >
-        {(menu || FALLBACK_HEADER_MENU).items.map((item) => {
-          if (!item.url) return null;
-
-          // if the url is internal, we strip the domain
-          const url =
-            item.url.includes('myshopify.com') ||
-            item.url.includes(publicStoreDomain) ||
-            item.url.includes(primaryDomainUrl)
-              ? new URL(item.url).pathname
-              : item.url;
-          return (
-            <NavLink
-              className="header-menu-item px-[16px] py-[10px] text-[14px]"
-              end
-              key={item.id}
-              onClick={close}
-              prefetch="intent"
-              to={url}
-            >
-              {item.title}
-            </NavLink>
-          );
-        })}
-
-        <SearchToggle />
-      </nav>
       
-      {/* <NavLink prefetch="intent" to="/" style={activeLinkStyle} end>
-        <strong>{shop.name}</strong>
-      </NavLink>
-      <HeaderMenu
-        menu={menu}
-        viewport="desktop"
-        primaryDomainUrl={header.shop.primaryDomain.url}
-        publicStoreDomain={publicStoreDomain}
-      />
-      <HeaderCtas isLoggedIn={isLoggedIn} cart={cart} /> */}
-    </header>
+      <header className="sticky top-0 z-1 bg-white">
+        <style jsx>{`
+          header::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 100%;
+            height: 8px;
+            width: 100%;
+            background: linear-gradient(rgba(0, 0, 0, 0.1), transparent);
+          }
+        `}
+        </style>
+
+        {/* Main */}
+        <div className='grid grid-cols-3 items-center justify-items-center px-[16px] py-[5px]'>
+          <Link 
+            to="/"
+            className='mr-auto'
+          >
+            <h1>
+              <img 
+                className='w-[205px] h-[52px]'
+                src={logo} 
+                alt="Tillys Logo" 
+              />
+            </h1>
+          </Link>
+
+          <Link 
+            to="/"
+            className='w-[200px] h-auto'
+          >
+            <img 
+              className='w-full h-full'
+              src={discoverYourStyle} 
+              alt="Discover Your Style" 
+            />
+          </Link>
+
+          <div className='flex items-center justify-end gap-[15px] w-full'>
+            <SearchFormPredictive className='relative w-fit h-[40px]'>
+              {({fetchResults, goToSearch, inputRef}) => (
+                <>
+                  <input
+                    name="q"
+                    onChange={fetchResults}
+                    onFocus={fetchResults}
+                    placeholder="Search"
+                    ref={inputRef}
+                    type="search"
+                    list={queriesDatalistId}
+                    className='py-[10px] px-[40px] bg-[#f5f5f5] border-none outline-none rounded-[800px] overflow-hidden placeholder:text-[#757575]'
+                  />
+
+                  &nbsp;
+                  <button 
+                    onClick={goToSearch}
+                    className='absolute left-[10px] top-1/2 -translate-y-1/2 flex items-center justify-center'
+                  >
+                    <svg className='h-[18px] w-[18px]' xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="#757575">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+                    </svg>
+                  </button>
+                </>
+              )}
+            </SearchFormPredictive>
+
+            <Suspense fallback={<CartBadge count={null} />}>
+              <Await resolve={cart}>
+                <CartBanner />
+              </Await>
+            </Suspense>
+          </div>
+        </div>
+
+        <nav 
+          className='flex items-center gap-4 pr-[16px] border-t border-[#C4BFC1]'
+          role="navigation"
+        >
+          {(menu || FALLBACK_HEADER_MENU).items.map((item) => {
+            if (!item.url) return null;
+
+            // if the url is internal, we strip the domain
+            const url =
+              item.url.includes('myshopify.com') ||
+              item.url.includes(publicStoreDomain) ||
+              item.url.includes(primaryDomainUrl)
+                ? new URL(item.url).pathname
+                : item.url;
+            return (
+              <NavLink
+                className="header-menu-item px-[16px] py-[10px] text-[14px]"
+                end
+                key={item.id}
+                onClick={close}
+                prefetch="intent"
+                to={url}
+              >
+                {item.title}
+              </NavLink>
+            );
+          })}
+
+          <SearchToggle />
+        </nav>
+        
+        {/* <NavLink prefetch="intent" to="/" style={activeLinkStyle} end>
+          <strong>{shop.name}</strong>
+        </NavLink>
+        <HeaderMenu
+          menu={menu}
+          viewport="desktop"
+          primaryDomainUrl={header.shop.primaryDomain.url}
+          publicStoreDomain={publicStoreDomain}
+        />
+        <HeaderCtas isLoggedIn={isLoggedIn} cart={cart} /> */}
+      </header>
+    </>
   );
 }
 
