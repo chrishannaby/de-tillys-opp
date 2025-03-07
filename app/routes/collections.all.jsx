@@ -1,4 +1,4 @@
-import {useLoaderData, Link} from '@remix-run/react';
+import {useLoaderData, Link, useNavigate} from '@remix-run/react';
 import {getPaginationVariables} from '@shopify/hydrogen';
 import {PaginatedResourceSection} from '~/components/PaginatedResourceSection';
 import {ProductItem} from '~/components/ProductItem';
@@ -30,17 +30,23 @@ export async function loader(args) {
  */
 async function loadCriticalData({context, request}) {
   const {storefront} = context;
+  const url = new URL(request.url);
+  const sort = url.searchParams.get('sort') || 'TITLE_ASC';
+  
   const paginationVariables = getPaginationVariables(request, {
     pageBy: 8,
   });
 
   const [{products}] = await Promise.all([
     storefront.query(CATALOG_QUERY, {
-      variables: {...paginationVariables},
+      variables: {
+        ...paginationVariables,
+        sortKey: sort.split('_')[0],
+        reverse: sort.endsWith('_DESC'),
+      },
     }),
-    // Add other queries here, so that they are loaded in parallel
   ]);
-  return {products};
+  return {products, sort};
 }
 
 /**
@@ -54,8 +60,17 @@ function loadDeferredData({context}) {
 }
 
 export default function Collection() {
-  /** @type {LoaderReturnData} */
-  const {products} = useLoaderData();
+  const {products, sort} = useLoaderData();
+  const navigate = useNavigate();
+
+  const handleSortChange = (event) => {
+    const newSort = event.target.value;
+    const url = new URL(window.location.href);
+    url.searchParams.set('sort', newSort);
+    navigate(url.pathname + url.search);
+  };
+
+  console.log(products);
 
   return (
     <div className="container mx-auto mt-[16px] mb-[30px]">
@@ -91,8 +106,28 @@ export default function Collection() {
         </div>
 
         {/* Right */}
-        <div className='flex items-center gap-[10px]'>
-          Sorting
+        <div className='flex items-center gap-[6px]'>
+          <label 
+            htmlFor="sort" 
+            className="text-[16px] font-[400]"
+          >
+            Sort:
+          </label>
+
+          <select
+            id="sort"
+            className="w-[200px] h-[38px] py-[6px] pl-[12px] pr-[35px] border border-[gray] rounded-[4px] text-[16px] font-[400] text-[#495057]"  
+            value={sort}
+            onChange={handleSortChange}
+          >
+            <option value="TITLE_ASC">Alphabetically, A-Z</option>
+            <option value="TITLE_DESC">Alphabetically, Z-A</option>
+            <option value="PRICE_ASC">Price, low to high</option>
+            <option value="PRICE_DESC">Price, high to low</option>
+            <option value="CREATED_ASC">Date, old to new</option>
+            <option value="CREATED_DESC">Date, new to old</option>
+            <option value="BEST_SELLING">Best selling</option>
+          </select>
         </div>
       </div>
 
@@ -148,8 +183,17 @@ const CATALOG_QUERY = `#graphql
     $last: Int
     $startCursor: String
     $endCursor: String
+    $sortKey: ProductSortKeys
+    $reverse: Boolean
   ) @inContext(country: $country, language: $language) {
-    products(first: $first, last: $last, before: $startCursor, after: $endCursor) {
+    products(
+      first: $first,
+      last: $last,
+      before: $startCursor,
+      after: $endCursor,
+      sortKey: $sortKey,
+      reverse: $reverse
+    ) {
       nodes {
         ...ProductItem
       }
