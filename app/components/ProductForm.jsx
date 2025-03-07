@@ -70,12 +70,18 @@ export function ProductForm({product, productOptions, selectedVariant, descripti
                   // render it as a button with javascript navigating to
                   // the variant so that SEO bots do not index these as
                   // duplicated links
+
                   return (
                     <button
                       type="button"
-                      className={`min-w-[85px] py-[13px] px-0 border border-black rounded-[3px] text-[14px] product-options-item${
-                        exists && !selected ? ' link' : ''
-                      }`}
+                      className={`cursor-pointer product-options-item
+                        ${exists && !selected ? ' link' : ''}
+                        ${swatch?.color 
+                          ? 'h-[32px] w-[32px] rounded-full overflow-hidden' 
+                          : 'min-w-[85px] py-[13px] px-0 border border-black rounded-[3px] text-[14px]'
+                        }
+                        ${selected && swatch?.color ? 'outline outline-2 outline-black outline-offset-3' : ''}
+                      `}
                       key={option.name + name}
                       style={{
                         backgroundColor: selected ? '#000' : 'transparent',
@@ -202,7 +208,7 @@ function ProductOptionSwatch({swatch, name}) {
   return (
     <div
       aria-label={name}
-      className="product-option-label-swatch"
+      className="product-option-label-swatch w-[32px] h-[32px]"
       style={{
         backgroundColor: color || 'transparent',
       }}

@@ -101,6 +101,8 @@ export default function Product() {
 
   const {title, descriptionHtml} = product;
 
+  console.log(product)
+
   return (
     <div className="container mx-auto">
       <div className="flex items-center gap-[8px] text-[11px] font-[400] py-[20px] px-[8px]">

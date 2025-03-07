@@ -31,7 +31,7 @@ export async function loader(args) {
 async function loadCriticalData({context, request}) {
   const {storefront} = context;
   const url = new URL(request.url);
-  const sort = url.searchParams.get('sort') || 'TITLE_ASC';
+  const sort = url.searchParams.get('sort') || 'RELEVANCE'; // Default sort
   
   const paginationVariables = getPaginationVariables(request, {
     pageBy: 8,
@@ -41,8 +41,8 @@ async function loadCriticalData({context, request}) {
     storefront.query(CATALOG_QUERY, {
       variables: {
         ...paginationVariables,
-        sortKey: sort.split('_')[0],
-        reverse: sort.endsWith('_DESC'),
+        sortKey: sort,
+        reverse: false,
       },
     }),
   ]);
@@ -71,6 +71,14 @@ export default function Collection() {
   };
 
   console.log(products);
+
+  // Update the sort options
+  const sortOptions = {
+    RELEVANCE: 'Featured',
+    TITLE: 'Alphabetically',
+    PRICE: 'Price',
+    BEST_SELLING: 'Best selling'
+  };
 
   return (
     <div className="container mx-auto mt-[16px] mb-[30px]">
@@ -120,12 +128,9 @@ export default function Collection() {
             value={sort}
             onChange={handleSortChange}
           >
-            <option value="TITLE_ASC">Alphabetically, A-Z</option>
-            <option value="TITLE_DESC">Alphabetically, Z-A</option>
-            <option value="PRICE_ASC">Price, low to high</option>
-            <option value="PRICE_DESC">Price, high to low</option>
-            <option value="CREATED_ASC">Date, old to new</option>
-            <option value="CREATED_DESC">Date, new to old</option>
+            <option value="RELEVANCE">Featured</option>
+            <option value="TITLE">Alphabetically</option>
+            <option value="PRICE">Price</option>
             <option value="BEST_SELLING">Best selling</option>
           </select>
         </div>
@@ -171,6 +176,27 @@ const PRODUCT_ITEM_FRAGMENT = `#graphql
         ...MoneyProductItem
       }
     }
+    options {
+      name
+      optionValues {
+        name
+        firstSelectableVariant {
+          id
+          selectedOptions {
+            name
+            value
+          }
+        }
+        swatch {
+          color
+          image {
+            previewImage {
+              url
+            }
+          }
+        }
+      }
+    }
   }
 `;
 
@@ -196,14 +222,6 @@ const CATALOG_QUERY = `#graphql
     ) {
       nodes {
         ...ProductItem
-        variants(first: 10) {
-          nodes {
-            selectedOptions {
-              name
-              value
-            }
-          }
-        }
       }
       pageInfo {
         hasPreviousPage

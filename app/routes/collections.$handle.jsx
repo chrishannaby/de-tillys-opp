@@ -36,7 +36,7 @@ async function loadCriticalData({context, params, request}) {
   const {handle} = params;
   const {storefront} = context;
   const url = new URL(request.url);
-  const sort = url.searchParams.get('sort') || 'TITLE_ASC';
+  const sort = url.searchParams.get('sort') || 'MANUAL'; // Default sort
   
   const paginationVariables = getPaginationVariables(request, {
     pageBy: 8,
@@ -51,8 +51,8 @@ async function loadCriticalData({context, params, request}) {
       variables: {
         handle,
         ...paginationVariables,
-        sortKey: sort.split('_')[0],
-        reverse: sort.endsWith('_DESC'),
+        sortKey: sort,
+        reverse: false,
       },
     }),
   ]);
@@ -88,6 +88,13 @@ export default function Collection() {
     const url = new URL(window.location.href);
     url.searchParams.set('sort', newSort);
     navigate(url.pathname + url.search);
+  };
+
+  const sortOptions = {
+    MANUAL: 'Featured',
+    TITLE: 'Alphabetically',
+    PRICE: 'Price',
+    BEST_SELLING: 'Best selling'
   };
 
   return (
@@ -134,12 +141,9 @@ export default function Collection() {
             value={sort}
             onChange={handleSortChange}
           >
-            <option value="TITLE_ASC">Alphabetically, A-Z</option>
-            <option value="TITLE_DESC">Alphabetically, Z-A</option>
-            <option value="PRICE_ASC">Price, low to high</option>
-            <option value="PRICE_DESC">Price, high to low</option>
-            <option value="CREATED_ASC">Date, old to new</option>
-            <option value="CREATED_DESC">Date, new to old</option>
+            <option value="MANUAL">Featured</option>
+            <option value="TITLE">Alphabetically</option>
+            <option value="PRICE">Price</option>
             <option value="BEST_SELLING">Best selling</option>
           </select>
         </div>
@@ -193,6 +197,27 @@ const PRODUCT_ITEM_FRAGMENT = `#graphql
         ...MoneyProductItem
       }
     }
+    options {
+      name
+      optionValues {
+        name
+        firstSelectableVariant {
+          id
+          selectedOptions {
+            name
+            value
+          }
+        }
+        swatch {
+          color
+          image {
+            previewImage {
+              url
+            }
+          }
+        }
+      }
+    }
   }
 `;
 
@@ -207,7 +232,7 @@ const COLLECTION_QUERY = `#graphql
     $last: Int
     $startCursor: String
     $endCursor: String
-    $sortKey: ProductSortKeys
+    $sortKey: ProductCollectionSortKeys
     $reverse: Boolean
   ) @inContext(country: $country, language: $language) {
     collection(handle: $handle) {

@@ -7,19 +7,22 @@ import {useVariantUrl} from '~/lib/variants';
 
 /**
  * @param {{
-*   product: ProductItemFragment;
-*   loading?: 'eager' | 'lazy';
-* }}
-*/
+ *   product: ProductItemFragment;
+ *   loading?: 'eager' | 'lazy';
+ * }}
+ */
 export function ProductItem({product, loading}) {
   const variantUrl = useVariantUrl(product.handle);
 
-  // Get unique color options
-  const colorOptions = product.variants?.nodes
-    ?.map(variant => variant.selectedOptions.find(opt => opt.name.toLowerCase() === 'color')?.value)
-    .filter((color, index, self) => color && self.indexOf(color) === index);
+  // Get color options with their swatches
+  const colorOption = product.options.find(
+    option => option.name.toLowerCase() === 'color'
+  );
 
-  console.log(product);
+  const colorSwatches = colorOption?.optionValues.map(value => ({
+    name: value.name,
+    swatch: value.swatch
+  })).filter(swatch => swatch.swatch !== null);
 
   return (
     <Link
@@ -47,14 +50,21 @@ export function ProductItem({product, loading}) {
           <Money data={product.priceRange.minVariantPrice} />
         </small>
 
-        {colorOptions && colorOptions.length > 0 && (
-          <div className="flex gap-2 mt-2">
-            {colorOptions.map((color) => (
+        {colorSwatches && colorSwatches.length > 0 && (
+          <div className="flex items-center flex-wrap gap-[8px] mt-1">
+            {colorSwatches.map((swatch) => (
               <div
-                key={color}
-                className="w-4 h-4 rounded-full border border-gray-300"
-                style={{backgroundColor: color.toLowerCase()}}
-                title={color}
+                key={swatch.name}
+                className="w-[26px] h-[26px] rounded-full relative"
+                style={{
+                  backgroundColor: swatch.swatch.color || 'transparent',
+                  backgroundImage: swatch.swatch.image?.previewImage?.url 
+                    ? `url(${swatch.swatch.image.previewImage.url})`
+                    : 'none',
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center',
+                }}
+                title={swatch.name}
               />
             ))}
           </div>
