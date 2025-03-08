@@ -13,6 +13,7 @@ import {ProductForm} from '~/components/ProductForm';
 import {useState} from 'react';
 import {Image} from '@shopify/hydrogen';
 import {RecommendedProducts} from '~/sections/recommended-products';
+import {RECOMMENDED_PRODUCTS_QUERY} from '~/sections/recommended-products';
 
 /**
  * @type {MetaFunction<typeof loader>}
@@ -75,16 +76,22 @@ async function loadCriticalData({context, params, request}) {
  * Make sure to not throw any errors here, as it will cause the page to 500.
  * @param {LoaderFunctionArgs}
  */
-function loadDeferredData({context, params}) {
-  // Put any API calls that is not critical to be available on first page render
-  // For example: product reviews, product recommendations, social feeds.
+function loadDeferredData({context}) {
+  const recommendedProducts = context.storefront
+    .query(RECOMMENDED_PRODUCTS_QUERY)
+    .catch((error) => {
+      console.error(error);
+      return null;
+    });
 
-  return {};
+  return {
+    recommendedProducts,
+  };
 }
 
 export default function Product() {
   /** @type {LoaderReturnData} */
-  const {product} = useLoaderData();
+  const {product, recommendedProducts} = useLoaderData();
   const [selectedImage, setSelectedImage] = useState(product.selectedOrFirstAvailableVariant?.image);
 
   // Optimistically selects a variant with given available variant information
@@ -125,7 +132,7 @@ export default function Product() {
         </span>
       </div>
 
-      <div className="product gap-[48px]">
+      <div className="product gap-[48px] mb-[16px]">
         <div className="flex gap-[30px]">
           {/* Vertical Image Gallery */}
           <div className="flex flex-col gap-[10px]">
@@ -189,7 +196,7 @@ export default function Product() {
         />
       </div>
 
-      <RecommendedProducts product={product} />
+      <RecommendedProducts products={recommendedProducts} />
     </div>
   );
 }
