@@ -1,5 +1,7 @@
 import {Suspense} from 'react';
 import {Await, Link, NavLink} from '@remix-run/react';
+import iosAppStore from '~/assets/ios-app-store.png'
+import googlePlayStore from '~/assets/google-app-store.png';
 
 /**
  * @param {FooterProps}
@@ -113,12 +115,12 @@ export function Footer({footer: footerPromise, header, publicStoreDomain}) {
           </h2>
         </div>
 
-        <div className='flex flex-col gap-[15px]'>
-          <h2 className='text-[16px] font-bold'>
+        <div className='flex flex-col'>
+          <h2 className='text-[16px] font-bold mb-[20px]'>
             Connect with Us
           </h2>
 
-          <div className='flex gap-[20px] items-center'>
+          <div className='flex items-center gap-[20px] mb-[35px]'>
             <a 
               href="https://www.facebook.com/Tillys"
               className='w-[32px] h-[32px] rounded-full overflow-hidden bg-black flex items-center justify-center'
@@ -200,8 +202,26 @@ export function Footer({footer: footerPromise, header, publicStoreDomain}) {
             </a>
           </div>
 
-          <div>
-            Download App
+          <div className="flex items-center gap-[16px]">
+            <a href="https://apps.apple.com/us/app/tillys/id561470611">
+              <img 
+                src={iosAppStore} 
+                className='w-[156px] h-[53px]'
+                alt="Download on the App Store" 
+                width={156}
+                height={53}
+              />
+            </a>
+
+            <a href="https://play.google.com/store/apps/details?id=com.tillys.tillys">
+              <img 
+                src={googlePlayStore}
+                className='w-[156px] h-[53px]'
+                alt="Get it on Google Play" 
+                width={156}
+                height={53}
+              />
+            </a>
           </div>
         </div>
       </div>
