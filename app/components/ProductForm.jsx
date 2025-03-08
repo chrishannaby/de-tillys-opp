@@ -146,7 +146,7 @@ export function ProductForm({product, productOptions, selectedVariant, descripti
           <span className="text-[14px] font-[700]">Reviews</span>
 
           <svg 
-            className={`w-[12px] h-[12px] transition-transform ${isReviewsAccordionOpen ? 'rotate-180' : ''}`}
+            className={`w-[16px] h-[16px] transition-transform ${isReviewsAccordionOpen ? 'rotate-180' : ''}`}
             viewBox="0 0 12 12" 
             fill="none"
           >
@@ -180,7 +180,7 @@ export function ProductForm({product, productOptions, selectedVariant, descripti
           </div>
           
           <svg 
-            className={`w-[12px] h-[12px] transition-transform ${isDescriptionAccordionOpen ? 'rotate-180' : ''}`}
+            className={`w-[16px] h-[16px] transition-transform ${isDescriptionAccordionOpen ? 'rotate-180' : ''}`}
             viewBox="0 0 12 12" 
             fill="none"
           >
