@@ -10,7 +10,7 @@ import {
 import {ProductPrice} from '~/components/ProductPrice';
 import {ProductImage} from '~/components/ProductImage';
 import {ProductForm} from '~/components/ProductForm';
-import {useState} from 'react';
+import {useState, useEffect} from 'react';
 import {Image} from '@shopify/hydrogen';
 import {RecommendedProducts} from '~/sections/recommended-products';
 import {RECOMMENDED_PRODUCTS_QUERY} from '~/sections/recommended-products';
@@ -92,6 +92,12 @@ function loadDeferredData({context}) {
 export default function Product() {
   /** @type {LoaderReturnData} */
   const {product, recommendedProducts} = useLoaderData();
+  
+  // Use useEffect to update selectedImage when product changes
+  useEffect(() => {
+    setSelectedImage(product.selectedOrFirstAvailableVariant?.image);
+  }, [product.id]); // Reset when product ID changes
+
   const [selectedImage, setSelectedImage] = useState(product.selectedOrFirstAvailableVariant?.image);
 
   // Optimistically selects a variant with given available variant information
