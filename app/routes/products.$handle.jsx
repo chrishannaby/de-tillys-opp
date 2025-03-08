@@ -10,6 +10,8 @@ import {
 import {ProductPrice} from '~/components/ProductPrice';
 import {ProductImage} from '~/components/ProductImage';
 import {ProductForm} from '~/components/ProductForm';
+import {useState} from 'react';
+import {Image} from '@shopify/hydrogen';
 
 /**
  * @type {MetaFunction<typeof loader>}
@@ -82,6 +84,7 @@ function loadDeferredData({context, params}) {
 export default function Product() {
   /** @type {LoaderReturnData} */
   const {product} = useLoaderData();
+  const [selectedImage, setSelectedImage] = useState(product.selectedOrFirstAvailableVariant?.image);
 
   // Optimistically selects a variant with given available variant information
   const selectedVariant = useOptimisticVariant(
@@ -124,7 +127,35 @@ export default function Product() {
       </div>
 
       <div className="product gap-[48px]">
-        <ProductImage image={selectedVariant?.image} />
+        <div className="flex gap-[30px]">
+          {/* Vertical Image Gallery */}
+          <div className="flex flex-col gap-[10px]">
+            {product.images?.nodes.map((image) => (
+              <button
+                key={image.id}
+                onClick={() => setSelectedImage(image)}
+                className={`w-[80px] h-[100px] overflow-hidden cursor-pointer hover:border-2 hover:border-black ${
+                  selectedImage?.id === image.id ? 'border border-black' : 'border border-gray-200'
+                }`}
+              >
+                <Image
+                  alt={image.altText || product.title}
+                  data={image}
+                  loading="lazy"
+                  sizes="80px"
+                  className="w-full h-full object-cover"
+                />
+              </button>
+            ))}
+          </div>
+
+          {/* Main Product Image */}
+          <ProductImage 
+            image={selectedImage || selectedVariant?.image} 
+            className="flex-1"
+          />
+        </div>
+        
         <div className="product-main">
           <h1 className="text-[28px] font-[700] mb-[8px]">
             {title}
@@ -207,6 +238,15 @@ const PRODUCT_FRAGMENT = `#graphql
     handle
     descriptionHtml
     description
+    images(first: 10) {
+      nodes {
+        id
+        url
+        altText
+        width
+        height
+      }
+    }
     encodedVariantExistence
     encodedVariantAvailability
     options {
