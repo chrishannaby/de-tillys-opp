@@ -151,7 +151,7 @@ export default function Product() {
 
           {/* Main Product Image */}
           <ProductImage 
-            image={selectedImage || selectedVariant?.image} 
+            image={selectedImage || selectedVariant?.image}
             className="flex-1"
           />
         </div>
