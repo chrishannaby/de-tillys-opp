@@ -104,7 +104,12 @@ export function ProductForm({product, productOptions, selectedVariant, descripti
                 }
               })}
             </div>
-            <br />
+
+            {option.name === 'Size' && (
+              <p className="text-[14px] underline mt-[20px] mb-[24px] cursor-pointer">
+                Size Chart
+              </p>
+            )}
           </div>
         );
       })}
