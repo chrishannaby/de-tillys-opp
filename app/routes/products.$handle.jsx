@@ -12,6 +12,7 @@ import {ProductImage} from '~/components/ProductImage';
 import {ProductForm} from '~/components/ProductForm';
 import {useState} from 'react';
 import {Image} from '@shopify/hydrogen';
+import {RecommendedProducts} from '~/sections/recommended-products';
 
 /**
  * @type {MetaFunction<typeof loader>}
@@ -104,8 +105,6 @@ export default function Product() {
 
   const {title, descriptionHtml} = product;
 
-  console.log(product)
-
   return (
     <div className="container mx-auto">
       <div className="flex items-center gap-[8px] text-[11px] font-[400] py-[20px] px-[8px]">
@@ -189,6 +188,8 @@ export default function Product() {
           }}
         />
       </div>
+
+      <RecommendedProducts product={product} />
     </div>
   );
 }

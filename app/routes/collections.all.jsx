@@ -70,8 +70,6 @@ export default function Collection() {
     navigate(url.pathname + url.search);
   };
 
-  console.log(products);
-
   // Update the sort options
   const sortOptions = {
     RELEVANCE: 'Featured',
