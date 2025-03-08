@@ -200,14 +200,14 @@ export function ProductForm({product, productOptions, selectedVariant, descripti
       {/* Social Icons */}
       <div className='flex gap-[10px] mt-[6px]'>
         <a 
-          href="mailto:?subject=Check this out on Tillys.com&amp;body=I want to recommend this product at Tillys%0D%0A%0D%0AFULL TILT Queen of Thorns Womens Baby Tee%0D%0A%0D%0Ahttps%3A%2F%2Fwww.tillys.com%2Fproduct%2Ffull-tilt-queen-of-thorns-womens-baby-tee%2F515924150.html" 
+          href="mailto:?subject=Check this out on Tillys.com&amp;" 
           className='w-[40px] h-[40px] rounded-full overflow-hidden bg-black flex items-center justify-center'
         >
           <svg width="20" height="20" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><path fill="white" d="M256 352c-16.53 0-33.06-5.422-47.16-16.41L0 173.2V400C0 426.5 21.49 448 48 448h416c26.51 0 48-21.49 48-48V173.2l-208.8 162.5C289.1 346.6 272.5 352 256 352zM16.29 145.3l212.2 165.1c16.19 12.6 38.87 12.6 55.06 0l212.2-165.1C505.1 137.3 512 125 512 112C512 85.49 490.5 64 464 64h-416C21.49 64 0 85.49 0 112C0 125 6.01 137.3 16.29 145.3z"/></svg>
         </a>
 
         <a 
-          href="https://www.facebook.com/share.php?u=https%3A%2F%2Fwww.tillys.com%2Fproduct%2Ffull-tilt-queen-of-thorns-womens-baby-tee%2F515924150.html"
+          href="https://www.facebook.com/Tillys"
           className='w-[40px] h-[40px] rounded-full overflow-hidden bg-black flex items-center justify-center'
         >
           <svg 
@@ -232,14 +232,14 @@ export function ProductForm({product, productOptions, selectedVariant, descripti
         </a>
         
         <a 
-          href="https://pinterest.com/pin/create/button/?url=https%3A%2F%2Fwww.tillys.com%2Fproduct%2Ffull-tilt-queen-of-thorns-womens-baby-tee%2F515924150.html&amp;description=FULL%20TILT%20Queen%20of%20Thorns%20Womens%20Baby%20Tee&amp;media=https%3A%2F%2Fwww.tillys.com%2Fon%2Fdemandware.static%2F-%2FSites-master-catalog%2Fdefault%2Fdw248bdbad%2Ftillys%2Fimages%2Fcatalog%2F1000x1000%2F515924150.jpg"
+          href="https://pinterest.com/tillys/"
           className='w-[40px] h-[40px] rounded-full overflow-hidden bg-black flex items-center justify-center'
         >
           <svg width="20" height="20" viewBox="0 0 512 512"><path fill="white" d="M255.998,0.001c-141.384,0 -255.998,114.617 -255.998,255.998c0,108.456 67.475,201.171 162.707,238.471c-2.24,-20.255 -4.261,-51.405 0.889,-73.518c4.65,-19.978 30.018,-127.248 30.018,-127.248c0,0 -7.659,-15.334 -7.659,-38.008c0,-35.596 20.632,-62.171 46.323,-62.171c21.839,0 32.391,16.399 32.391,36.061c0,21.966 -13.984,54.803 -21.203,85.235c-6.03,25.482 12.779,46.261 37.909,46.261c45.503,0 80.477,-47.976 80.477,-117.229c0,-61.293 -44.045,-104.149 -106.932,-104.149c-72.841,0 -115.597,54.634 -115.597,111.095c0,22.004 8.475,45.596 19.052,58.421c2.09,2.535 2.398,4.758 1.776,7.343c-1.945,8.087 -6.262,25.474 -7.111,29.032c-1.117,4.686 -3.711,5.681 -8.561,3.424c-31.974,-14.884 -51.963,-61.627 -51.963,-99.174c0,-80.755 58.672,-154.915 169.148,-154.915c88.806,0 157.821,63.279 157.821,147.85c0,88.229 -55.629,159.232 -132.842,159.232c-25.94,0 -50.328,-13.476 -58.674,-29.394c0,0 -12.838,48.878 -15.95,60.856c-5.782,22.237 -21.382,50.109 -31.818,67.11c23.955,7.417 49.409,11.416 75.797,11.416c141.389,0 256.003,-114.612 256.003,-256.001c0,-141.381 -114.614,-255.998 -256.003,-255.998Z"/></svg>
         </a>
 
         <a 
-          href="https://twitter.com/share?url=https%3A%2F%2Fwww.tillys.com%2Fproduct%2Ffull-tilt-queen-of-thorns-womens-baby-tee%2F515924150.html&amp;text=FULL TILT Queen of Thorns Womens Baby Tee" 
+          href="https://twitter.com/tillys" 
           data-share="twitter" 
           title="Share a link to FULL TILT Queen of Thorns Womens Baby Tee on Twitter"
           className='w-[40px] h-[40px] rounded-full overflow-hidden bg-black flex items-center justify-center'
