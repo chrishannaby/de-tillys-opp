@@ -2,6 +2,7 @@ import {Suspense} from 'react';
 import {Await, Link, NavLink} from '@remix-run/react';
 import iosAppStore from '~/assets/ios-app-store.png'
 import googlePlayStore from '~/assets/google-app-store.png';
+import allyantBlk from '~/assets/allyant-blk.webp';
 
 /**
  * @param {FooterProps}
@@ -267,6 +268,18 @@ export function Footer({footer: footerPromise, header, publicStoreDomain}) {
                 />
               </a>
             </div>
+
+            <a 
+              href="https://www.tillys.com/cs-accessibility.html"
+              className="mt-[42px]"
+            >
+              <img
+                src={allyantBlk}
+                alt="Allyant Accessibility"
+                width={70}
+                height={70}
+              />
+            </a>
           </div>
         </div>
       </div>
