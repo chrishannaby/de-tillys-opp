@@ -8,6 +8,8 @@ import {ImageBanner} from '~/sections/image-banner';
 import {FourImages} from '~/sections/four-images';
 import {ClearanceBanner} from '~/sections/clearance-banner';
 
+import {MetaText} from '~/sections/meta-text';
+
 /**
  * @type {MetaFunction}
  */
@@ -51,7 +53,7 @@ export default function Homepage() {
 
       <ClearanceBanner />
 
-      {/* Bottom Text */}
+      <MetaText />
     </div>
   );
 }
