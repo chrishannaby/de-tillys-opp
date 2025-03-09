@@ -5,6 +5,9 @@ import {PromoBanner} from '~/sections/promo-banner';
 import {TriBanner} from '~/sections/tri-banner';
 import {ImageBanner} from '~/sections/image-banner';
 
+import {FourImages} from '~/sections/four-images';
+import {ClearanceBanner} from '~/sections/clearance-banner';
+
 /**
  * @type {MetaFunction}
  */
@@ -29,8 +32,26 @@ export default function Homepage() {
   return (
     <div className="home">
       <PromoBanner />
+
+      {/* Media with Text - Left + Video */}
+
       <TriBanner />
       <ImageBanner />
+
+      {/* Image Banner with Logo + 2 Buttons */}
+      {/* Image Banner with Logo + 2 Buttons Horizontal */}
+      {/* Dual Banner with Text Below */}
+
+      {/* Tri Banner Logo Below */}
+
+      {/* Media with Text - Right + Image */}
+
+      <FourImages title="Shop Accessories" />
+      <FourImages title="Shop by Category" />
+
+      <ClearanceBanner />
+
+      {/* Bottom Text */}
     </div>
   );
 }
