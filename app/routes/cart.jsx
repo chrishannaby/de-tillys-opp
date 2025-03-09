@@ -2,6 +2,12 @@ import {useLoaderData} from '@remix-run/react';
 import {CartForm} from '@shopify/hydrogen';
 import {data} from '@shopify/remix-oxygen';
 import {CartMain} from '~/components/CartMain';
+import { CartSummary } from '~/components/CartSummary';
+
+import {useOptimisticCart} from '@shopify/hydrogen';
+import {Link} from '@remix-run/react';
+import {useAside} from '~/components/Aside';
+import {CartLineItem} from '~/components/CartLineItem';
 
 /**
  * @type {MetaFunction}
@@ -109,12 +115,38 @@ export async function loader({context}) {
 
 export default function Cart() {
   /** @type {LoaderReturnData} */
-  const cart = useLoaderData();
+  const originalCart = useLoaderData();
+
+  const cart = useOptimisticCart(originalCart);
+
+  const linesCount = Boolean(cart?.lines?.nodes?.length || 0);
+  const withDiscount =
+    cart &&
+    Boolean(cart?.discountCodes?.filter((code) => code.applicable)?.length);
+  const className = `cart-main ${withDiscount ? 'with-discount' : ''}`;
+  const cartHasItems = cart?.totalQuantity && cart?.totalQuantity > 0;
 
   return (
-    <div className="cart">
-      <h1>Cart</h1>
-      <CartMain layout="page" cart={cart} />
+    <div className="container mx-auto pt-[16px] flex gap-[16px]">
+      {/* Shopping Bag */}
+      <div className='w-full'>
+        <div className='flex items-center justify-between mb-[20px] pb-[10px] border-b border-black'>
+          <h1 className='text-[16px] font-[700]'>
+            Shopping Bag
+          </h1>
+
+          <p className='text-[12px] font-[300]'>
+            Need Help? Call <a className='underline' href="tel:18664845597">1-866-484-5597</a>
+          </p>
+        </div>
+
+        {(cart?.lines?.nodes ?? []).map((line) => (
+          <CartLineItem key={line.id} line={line} />
+        ))}
+        
+      </div>
+
+      <CartSummary cart={cart} />
     </div>
   );
 }
