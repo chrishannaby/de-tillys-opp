@@ -5,7 +5,7 @@ export function TriBanner() {
       <div className="flex-[1] w-[33%] h-[800px]">
         <a href="/" className="relative w-full">
           <div className="absolute bottom-[20%] left-1/2 -translate-x-1/2 flex flex-col items-center gap-[22px]">
-            <h2 className="text-white uppercase text-[24px] font-bold">
+            <h2 className="text-white uppercase text-[24px] font-bold whitespace-nowrap">
               Shorts
             </h2>
 
@@ -35,7 +35,7 @@ export function TriBanner() {
       <div className="flex-[1] w-[650px] h-[800px]">
         <a href="/" className="relative w-full">
           <div className="absolute bottom-[20%] left-1/2 -translate-x-1/2 flex flex-col items-center gap-[22px]">
-            <h2 className="text-white uppercase text-[24px] font-bold text-center">
+            <h2 className="text-white uppercase text-[24px] font-bold text-center whitespace-nowrap">
               Women's Graphic Tees
             </h2>
 
