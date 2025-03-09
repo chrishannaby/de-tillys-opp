@@ -133,13 +133,21 @@ export async function loader({context}) {
 export default function Cart() {
   const {recommendedProducts, ...originalCart} = useLoaderData();
   const cart = useOptimisticCart(originalCart);
-
-  const linesCount = Boolean(cart?.lines?.nodes?.length || 0);
-  const withDiscount =
-    cart &&
-    Boolean(cart?.discountCodes?.filter((code) => code.applicable)?.length);
-  const className = `cart-main ${withDiscount ? 'with-discount' : ''}`;
   const cartHasItems = cart?.totalQuantity && cart?.totalQuantity > 0;
+
+  if (!cartHasItems) {
+    return (
+      <div className="container mx-auto pt-[120px] pb-[120px]">
+        <h1 className="text-center text-[40px] font-[700] mb-[8px]">
+          Your Shopping Bag is Empty
+        </h1>
+
+        <p className='text-center text-[16px] font-[400]'>
+          Need help filling your bag? We have hand picked some items to get you started!
+        </p>
+      </div>
+    );
+  }
 
   return (
     <>
