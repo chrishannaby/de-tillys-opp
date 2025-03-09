@@ -140,8 +140,8 @@ export default function Cart() {
           </p>
         </div>
 
-        {(cart?.lines?.nodes ?? []).map((line) => (
-          <CartLineItem key={line.id} line={line} />
+        {(cart?.lines?.nodes ?? []).map((line, index) => (
+          <CartLineItem key={line.id} line={line} index={index} />
         ))}
         
       </div>

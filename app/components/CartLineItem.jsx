@@ -13,14 +13,16 @@ import {Money} from '@shopify/hydrogen';
  *   line: CartLine;
  * }}
  */
-export function CartLineItem({layout, line}) {
+export function CartLineItem({layout, line, index}) {
   const {id, merchandise} = line;
   const {product, title, image, selectedOptions} = merchandise;
   const lineItemUrl = useVariantUrl(product.handle, selectedOptions);
   const {close} = useAside();
 
   return (
-    <div key={id} className="flex first:pt-0 first:mt-0 first:border-t-0 pt-[20px] mt-[20px] border-t border-[#f5f5f5]">
+    <div key={id} className={`flex w-full ${
+      Number(index) > 0 ? 'pt-[20px] mt-[20px] border-t border-[#f5f5f5]' : ''
+    }`}>
       {image && (
         <Image
           alt={title}
@@ -37,13 +39,13 @@ export function CartLineItem({layout, line}) {
         <Link
           prefetch="intent"
           to={lineItemUrl}
-          className='text-[14px] font-[700] mb-[8px]'
+          className='text-[14px] font-[700] mb-[8px] max-w-[200px]'
         >
           {product.title}
         </Link>
 
         {line.merchandise.id && (
-          <p className='text-[14px] font-[700] mb-[8px]'>
+          <p className='text-[14px] font-[700] mb-[8px] max-w-[200px]'>
             Item# {line.merchandise.id.replace('gid://shopify/ProductVariant/', '')}
           </p>
         )}
@@ -57,6 +59,32 @@ export function CartLineItem({layout, line}) {
               {option.name}: {option.value.toUpperCase()}
             </p>
           ))}
+        </div>
+
+        <CartLineRemoveButton 
+          lineIds={[id]} 
+          disabled={!!line.isOptimistic}
+          className="cursor-pointer rounded-[2px] border border-black text-[12px] font-[400] text-left mt-[5px] py-[5px] px-[7px]"
+        />
+      </div>
+
+
+      <div className='flex gap-[10px] border border-black p-[10px] h-fit max-w-[260px] mr-[50px]'>
+        <input 
+          type="radio"
+          className='w-[20px] h-[20px] border border-black rounded-[2px] accent-black'
+          checked
+          onChange={() => {}}
+        />
+
+        <div>
+          <span className='text-[#757575] text-[12px] font-[700] mb-[8px]'>
+            Ship It
+          </span>
+
+          <p>
+            Order today and get it by {new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toLocaleDateString('en-US', {month: 'long', day: 'numeric'})} with Economy Shipping
+          </p>
         </div>
       </div>
 
@@ -116,10 +144,6 @@ function CartLineQuantity({line}) {
           })}
         </select>
       </CartLineUpdateButton>
-      
-      <div className="mt-2">
-        <CartLineRemoveButton lineIds={[lineId]} disabled={!!isOptimistic} />
-      </div>
     </div>
   );
 }
@@ -133,14 +157,18 @@ function CartLineQuantity({line}) {
  *   disabled: boolean;
  * }}
  */
-function CartLineRemoveButton({lineIds, disabled}) {
+function CartLineRemoveButton({lineIds, disabled, className}) {
   return (
     <CartForm
       route="/cart"
       action={CartForm.ACTIONS.LinesRemove}
       inputs={{lineIds}}
     >
-      <button disabled={disabled} type="submit">
+      <button 
+        disabled={disabled} 
+        type="submit"
+        className={className}
+      >
         Remove
       </button>
     </CartForm>
