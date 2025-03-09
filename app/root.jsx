@@ -8,6 +8,7 @@ import {
   useRouteLoaderData,
   ScrollRestoration,
   isRouteErrorResponse,
+  LiveReload,
 } from '@remix-run/react';
 import favicon from '~/assets/favicon.ico';
 import resetStyles from '~/styles/reset.css?url';
@@ -159,7 +160,7 @@ export function Layout({children}) {
         <Meta />
         <Links />
       </head>
-      <body>
+      <body className="font-['DM_Sans']">
         {data ? (
           <Analytics.Provider
             cart={data.cart}
@@ -173,6 +174,7 @@ export function Layout({children}) {
         )}
         <ScrollRestoration nonce={nonce} />
         <Scripts nonce={nonce} />
+        <LiveReload />
       </body>
     </html>
   );

@@ -2,7 +2,9 @@ import {useLoaderData} from '@remix-run/react';
 import {CartForm} from '@shopify/hydrogen';
 import {data} from '@shopify/remix-oxygen';
 import {CartMain} from '~/components/CartMain';
-import { CartSummary } from '~/components/CartSummary';
+import {CartSummary} from '~/components/CartSummary';
+import {RecommendedProducts} from '~/sections/recommended-products';
+import {RECOMMENDED_PRODUCTS_QUERY} from '~/sections/recommended-products';
 
 import {useOptimisticCart} from '@shopify/hydrogen';
 import {Link} from '@remix-run/react';
@@ -110,13 +112,26 @@ export async function action({request, context}) {
  */
 export async function loader({context}) {
   const {cart} = context;
-  return await cart.get();
+
+  // Load cart data
+  const cartData = await cart.get();
+
+  // Load recommended products
+  const recommendedProducts = await context.storefront
+    .query(RECOMMENDED_PRODUCTS_QUERY)
+    .catch((error) => {
+      console.error(error);
+      return null;
+    });
+
+  return {
+    ...cartData,
+    recommendedProducts
+  };
 }
 
 export default function Cart() {
-  /** @type {LoaderReturnData} */
-  const originalCart = useLoaderData();
-
+  const {recommendedProducts, ...originalCart} = useLoaderData();
   const cart = useOptimisticCart(originalCart);
 
   const linesCount = Boolean(cart?.lines?.nodes?.length || 0);
@@ -127,27 +142,34 @@ export default function Cart() {
   const cartHasItems = cart?.totalQuantity && cart?.totalQuantity > 0;
 
   return (
-    <div className="container mx-auto pt-[16px] flex gap-[16px]">
-      {/* Shopping Bag */}
-      <div className='w-full'>
-        <div className='flex items-center justify-between mb-[20px] pb-[10px] border-b border-black'>
-          <h1 className='text-[16px] font-[700]'>
-            Shopping Bag
-          </h1>
+    <>
+      <div className="container mx-auto pt-[16px] flex gap-[16px]">
+        {/* Shopping Bag */}
+        <div className='w-full'>
+          <div className='flex items-center justify-between mb-[20px] pb-[10px] border-b border-black'>
+            <h1 className='text-[16px] font-[700]'>
+              Shopping Bag
+            </h1>
 
-          <p className='text-[12px] font-[300]'>
-            Need Help? Call <a className='underline' href="tel:18664845597">1-866-484-5597</a>
-          </p>
+            <p className='text-[12px] font-[300]'>
+              Need Help? Call <a className='underline' href="tel:18664845597">1-866-484-5597</a>
+            </p>
+          </div>
+
+          {(cart?.lines?.nodes ?? []).map((line, index) => (
+            <CartLineItem key={line.id} line={line} index={index} />
+          ))}
         </div>
 
-        {(cart?.lines?.nodes ?? []).map((line, index) => (
-          <CartLineItem key={line.id} line={line} index={index} />
-        ))}
-        
+        <CartSummary cart={cart} />
       </div>
 
-      <CartSummary cart={cart} />
-    </div>
+      {/* Recommended Products Section */}
+      <RecommendedProducts 
+        products={recommendedProducts} 
+        title="You might be interested in these items"
+      />
+    </>
   );
 }
 

@@ -3,11 +3,11 @@ import {Suspense} from 'react';
 import {Await} from '@remix-run/react';
 import {Image, Money} from '@shopify/hydrogen';
 
-export function RecommendedProducts({products}) {
+export function RecommendedProducts({products, title = "Recommended Products"}) {
   return (
     <section className="container mx-auto py-[16px]">
       <h2 className="text-[18.4px] font-[700] my-[16px] text-center">
-        Recommended Products
+        {title}
       </h2>
 
       <Suspense fallback={<div>Loading...</div>}>

@@ -82,7 +82,7 @@ export function CartLineItem({layout, line, index}) {
             Ship It
           </span>
 
-          <p>
+          <p className='text-[12px] font-[400] text-[#757575] mt-[8px] mb-[16px]'>
             Order today and get it by {new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toLocaleDateString('en-US', {month: 'long', day: 'numeric'})} with Economy Shipping
           </p>
         </div>
