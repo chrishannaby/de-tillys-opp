@@ -15,7 +15,7 @@ import {CartLineItem} from '~/components/CartLineItem';
  * @type {MetaFunction}
  */
 export const meta = () => {
-  return [{title: `Hydrogen | Cart`}];
+  return [{title: `Cart | Tillys`}];
 };
 
 /**

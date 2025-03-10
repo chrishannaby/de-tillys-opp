@@ -14,7 +14,7 @@ import {MetaText} from '~/sections/meta-text';
  * @type {MetaFunction}
  */
 export const meta = () => {
-  return [{title: 'Hydrogen | Home'}];
+  return [{title: "Tillys | Men, Women and Kids' Clothing & Shoe Store | Home"}];
 };
 
 /**

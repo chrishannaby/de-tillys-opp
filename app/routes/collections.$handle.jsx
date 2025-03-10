@@ -11,7 +11,7 @@ import {ProductItem} from '~/components/ProductItem';
  * @type {MetaFunction<typeof loader>}
  */
 export const meta = ({data}) => {
-  return [{title: `Hydrogen | ${data?.collection.title ?? ''} Collection`}];
+  return [{title: `${data?.collection.title ?? ''} | Tillys`}];
 };
 
 /**

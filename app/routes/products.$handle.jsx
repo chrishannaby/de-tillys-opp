@@ -20,7 +20,7 @@ import {RECOMMENDED_PRODUCTS_QUERY} from '~/sections/recommended-products';
  */
 export const meta = ({data}) => {
   return [
-    {title: `Hydrogen | ${data?.product.title ?? ''}`},
+    {title: `${data?.product.title ?? ''} | Tillys`},
     {
       rel: 'canonical',
       href: `/products/${data?.product.handle}`,
