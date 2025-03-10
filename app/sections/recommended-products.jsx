@@ -1,5 +1,5 @@
 import {ProductItem} from '~/components/ProductItem';
-import {Suspense} from 'react';
+import {Suspense, useMemo} from 'react';
 import {Await} from '@remix-run/react';
 import {Image, Money} from '@shopify/hydrogen';
 
@@ -17,10 +17,12 @@ export function RecommendedProducts({products, title = "Recommended Products"}) 
             const allProducts = response?.products?.nodes || [];
             if (allProducts.length === 0) return null;
 
-            // Randomly select 6 products
-            const randomProducts = allProducts
-              .sort(() => 0.5 - Math.random()) // Shuffle array
-              .slice(0, 6); // Take first 6
+            // Memoize the randomized products
+            const randomProducts = useMemo(() => {
+              return [...allProducts]
+                .sort(() => 0.5 - Math.random())
+                .slice(0, 6);
+            }, [allProducts.map(p => p.id).join(',')]); // Only re-randomize if products change
 
             return (
               <div className="grid grid-cols-6 gap-[30px]">
