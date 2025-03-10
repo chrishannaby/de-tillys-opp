@@ -1,6 +1,6 @@
 import {useLoaderData} from '@remix-run/react';
 import {CartForm} from '@shopify/hydrogen';
-import {data} from '@shopify/remix-oxygen';
+import {data, json} from '@shopify/remix-oxygen';
 import {CartMain} from '~/components/CartMain';
 import {CartSummary} from '~/components/CartSummary';
 import {RecommendedProducts} from '~/sections/recommended-products';
@@ -28,7 +28,6 @@ export const headers = ({actionHeaders}) => actionHeaders;
  */
 export async function action({request, context}) {
   const {cart} = context;
-
   const formData = await request.formData();
 
   const {action, inputs} = CartForm.getFormInput(formData);
@@ -52,41 +51,17 @@ export async function action({request, context}) {
       break;
     case CartForm.ACTIONS.DiscountCodesUpdate: {
       const formDiscountCode = inputs.discountCode;
-
-      // User inputted discount code
       const discountCodes = formDiscountCode ? [formDiscountCode] : [];
-
-      // Combine discount codes already applied on cart
       discountCodes.push(...inputs.discountCodes);
-
       result = await cart.updateDiscountCodes(discountCodes);
-      break;
-    }
-    case CartForm.ACTIONS.GiftCardCodesUpdate: {
-      const formGiftCardCode = inputs.giftCardCode;
-
-      // User inputted gift card code
-      const giftCardCodes = formGiftCardCode ? [formGiftCardCode] : [];
-
-      // Combine gift card codes already applied on cart
-      giftCardCodes.push(...inputs.giftCardCodes);
-
-      result = await cart.updateGiftCardCodes(giftCardCodes);
-      break;
-    }
-    case CartForm.ACTIONS.BuyerIdentityUpdate: {
-      result = await cart.updateBuyerIdentity({
-        ...inputs.buyerIdentity,
-      });
       break;
     }
     default:
       throw new Error(`${action} cart action is not defined`);
   }
 
-  const cartId = result?.cart?.id;
-  const headers = cartId ? cart.setCartId(result.cart.id) : new Headers();
-  const {cart: cartResult, errors, warnings} = result;
+  const headers = cart.setCartId(result.cart.id);
+  const {cart: cartResult, errors} = result;
 
   const redirectTo = formData.get('redirectTo') ?? null;
   if (typeof redirectTo === 'string') {
@@ -94,13 +69,12 @@ export async function action({request, context}) {
     headers.set('Location', redirectTo);
   }
 
-  return data(
+  return json(
     {
       cart: cartResult,
       errors,
-      warnings,
       analytics: {
-        cartId,
+        cartId: cartResult.id,
       },
     },
     {status, headers},

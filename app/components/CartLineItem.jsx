@@ -107,8 +107,6 @@ export function CartLineItem({layout, line, index}) {
 
 /**
  * Provides the controls to update the quantity of a line item in the cart.
- * These controls are disabled when the line item is new, and the server
- * hasn't yet responded that it was successfully added to the cart.
  * @param {{line: CartLine}}
  */
 function CartLineQuantity({line}) {
@@ -121,29 +119,44 @@ function CartLineQuantity({line}) {
         Quantity
       </p>
       
-      <CartLineUpdateButton lineId={lineId}>
-        <select 
-          className="text-[12px] font-[400] border border-gray-200 rounded px-2 py-1"
-          defaultValue={quantity}
-          disabled={!!isOptimistic}
-          onChange={(e) => {
-            // Submit the closest form when value changes
-            e.target.form.submit();
+      <div className="flex items-center border border-gray-200 rounded w-fit">
+        <CartForm
+          route="/cart"
+          action={CartForm.ACTIONS.LinesUpdate}
+          inputs={{
+            lines: [{id: lineId, quantity: quantity - 1}],
           }}
         >
-          {[...Array(10)].map((_, i) => {
-            const value = i + 1;
-            return (
-              <option 
-                key={value} 
-                value={value}
-              >
-                {value}
-              </option>
-            );
-          })}
-        </select>
-      </CartLineUpdateButton>
+          <button
+            type="submit"
+            aria-label="Decrease quantity"
+            disabled={quantity <= 1}
+            className="w-[32px] h-[32px] flex items-center justify-center text-[12px] font-[400] disabled:opacity-50 enabled:cursor-pointer"
+          >
+            &#8722;
+          </button>
+        </CartForm>
+
+        <div className="px-2 text-center text-[12px] font-[400]">
+          {quantity}
+        </div>
+
+        <CartForm
+          route="/cart"
+          action={CartForm.ACTIONS.LinesUpdate}
+          inputs={{
+            lines: [{id: lineId, quantity: quantity + 1}],
+          }}
+        >
+          <button
+            type="submit"
+            aria-label="Increase quantity"
+            className="w-[32px] h-[32px] flex items-center justify-center text-[12px] font-[400] enabled:cursor-pointer"
+          >
+            &#43;
+          </button>
+        </CartForm>
+      </div>
     </div>
   );
 }
