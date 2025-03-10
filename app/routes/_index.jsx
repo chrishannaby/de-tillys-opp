@@ -37,7 +37,7 @@ export default function Homepage() {
 
       {/* Media with Text - Left + Video */}
 
-      <TriBanner />
+      <TriBanner identifier="mQpBSVMoUsrJpGnHfMSge" />
 
       <ImageBanner identifier="3xmCzSsHmKanmwC2lGdts8" />
       <ImageBanner identifier="5u2Y4g19U5hcB0d3eoQWqs" />
