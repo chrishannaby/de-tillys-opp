@@ -1,6 +1,8 @@
 import {Suspense, useId} from 'react';
 import {Await, Link, NavLink, useAsyncValue} from '@remix-run/react';
 import {useAnalytics, useOptimisticCart} from '@shopify/hydrogen';
+import {CartNotification} from './CartNotification';
+import {useState, useEffect} from 'react';
 
 import {
   SEARCH_ENDPOINT,
@@ -19,6 +21,23 @@ export function Header({header, isLoggedIn, cart, publicStoreDomain}) {
   const {shop, menu} = header;
   const {close} = useAside();
   const queriesDatalistId = useId();
+  const [notification, setNotification] = useState({
+    show: false,
+    title: ''
+  });
+
+  // Listen for custom event
+  useEffect(() => {
+    const handleCartAdd = (event) => {
+      setNotification({
+        show: true,
+        title: event.detail.title
+      });
+    };
+
+    window.addEventListener('cartItemAdded', handleCartAdd);
+    return () => window.removeEventListener('cartItemAdded', handleCartAdd);
+  }, []);
 
   return (
     <>
@@ -168,6 +187,12 @@ export function Header({header, isLoggedIn, cart, publicStoreDomain}) {
         />
         <HeaderCtas isLoggedIn={isLoggedIn} cart={cart} /> */}
       </header>
+
+      <CartNotification 
+        show={notification.show}
+        title={notification.title}
+        onClose={() => setNotification({show: false, title: ''})}
+      />
     </>
   );
 }

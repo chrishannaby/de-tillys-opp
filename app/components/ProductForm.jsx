@@ -16,6 +16,16 @@ export function ProductForm({product, productOptions, selectedVariant, descripti
   const [isReviewsAccordionOpen, setIsReviewsAccordionOpen] = useState(true);
   const [isDescriptionAccordionOpen, setIsDescriptionAccordionOpen] = useState(true);
 
+  const handleAddToCart = () => {
+    // Dispatch custom event when item is added to cart
+    const event = new CustomEvent('cartItemAdded', {
+      detail: {
+        title: product.title
+      }
+    });
+    window.dispatchEvent(event);
+  };
+
   return (
     <div className="product-form mt-[8px]">
       {productOptions.map((option) => {
@@ -118,10 +128,8 @@ export function ProductForm({product, productOptions, selectedVariant, descripti
 
       <AddToCartButton
         disabled={!selectedVariant || !selectedVariant.availableForSale}
-        // onClick={() => {
-        //   open('cart');
-        // }}
         className='w-full'
+        onClick={handleAddToCart}
         lines={
           selectedVariant
             ? [
