@@ -52,7 +52,7 @@ export default function Homepage() {
       <FourImages title="Shop Accessories" />
       <FourImages title="Shop by Category" />
 
-      <ClearanceBanner />
+      <ClearanceBanner identifier="5Ru67QydWtH5q8motcvxip" />
 
       <MetaText identifier="3d7pZrSMyMzRfQfxFmUAKa" />
     </div>
