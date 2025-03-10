@@ -63,7 +63,7 @@ export function ImageBanner({identifier}) {
         {ctaLabel && ctaLink && (
           <Link
             to={ctaLink}
-            className="absolute bottom-[32px] left-1/2 -translate-x-1/2 bg-black text-white text-[14px] font-[700] py-[10px] px-[22px] rounded-[3px] uppercase"
+            className="absolute bottom-[32px] left-1/2 -translate-x-1/2 text-center text-[14px] font-[400] bg-white text-black py-[10px] px-[25px] rounded-[25px]"
           >
             {ctaLabel}
           </Link>

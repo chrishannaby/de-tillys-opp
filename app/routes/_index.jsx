@@ -33,7 +33,7 @@ export default function Homepage() {
   const data = useLoaderData();
   return (
     <div className="home">
-      <PromoBanner />
+      <PromoBanner identifier="4I4qBXKqbUuff8lRh6Ve8e" />
 
       {/* Media with Text - Left + Video */}
 
