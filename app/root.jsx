@@ -126,6 +126,9 @@ function loadDeferredData({context}) {
     .query(FOOTER_QUERY, {
       cache: storefront.CacheLong(),
       variables: {
+        footerForYouMenuHandle: 'footer-for-you-menu',
+        footerGuestServicesMenuHandle: 'footer-guest-services-menu',
+        footerCompanyMenuHandle: 'footer-company-menu',
         footerMenuHandle: 'footer', // Adjust to your footer menu handle
       },
     })
