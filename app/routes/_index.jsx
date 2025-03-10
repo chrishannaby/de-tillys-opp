@@ -38,10 +38,11 @@ export default function Homepage() {
       {/* Media with Text - Left + Video */}
 
       <TriBanner />
-      <ImageBanner />
 
-      {/* Image Banner with Logo + 2 Buttons */}
-      {/* Image Banner with Logo + 2 Buttons Horizontal */}
+      <ImageBanner identifier="3xmCzSsHmKanmwC2lGdts8" />
+      <ImageBanner identifier="5u2Y4g19U5hcB0d3eoQWqs" />
+      <ImageBanner identifier="22bePoyqoT3ltUA6PYYJNn" />
+
       {/* Dual Banner with Text Below */}
 
       {/* Tri Banner Logo Below */}

@@ -43,7 +43,7 @@ export default {
         [
           "default-src 'self'",
           "connect-src 'self' https://*.shopify.com https://*.contentful.com https://monorail-edge.shopifysvc.com http://localhost:* ws://localhost:* ws://127.0.0.1:* ws://*.tryhydrogen.dev:*",
-          "img-src 'self' data: https://*.shopify.com https://*.contentful.com",
+          "img-src 'self' data: https://*.shopify.com https://*.contentful.com https://images.ctfassets.net",
           "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.shopify.com",
           "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
           "font-src 'self' https://fonts.gstatic.com",

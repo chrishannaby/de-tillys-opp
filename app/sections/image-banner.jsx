@@ -1,16 +1,74 @@
-export function ImageBanner() {
-  return (
-    <section className="relative container mx-auto pb-[41px]">
-      <div className="h-[766px] w-full bg-red-600"></div>
+import {useState, useEffect} from 'react';
+import {getContentfulData} from '~/lib/contentful';
+import {Link} from '@remix-run/react';
 
-      <div className="absolute bottom-[120px] left-1/2 -translate-x-1/2">
-        <a 
-          href="/"
-          className="bg-white text-black py-[10px] px-[25px] rounded-[25px] text-[14px] font-[400] w-fit text-center whitespace-nowrap"
-        >
-          Shop Now
-        </a>
+const IMAGE_BANNER_QUERY = `
+  query GetImageBanner($identifier: String!) {
+    imageBanner(id: $identifier) {
+      showSection
+      image {
+        url
+        description
+        width
+        height
+      }
+      ctaLabel
+      ctaLink
+      sys {
+        id
+      }
+    }
+  }
+`;
+
+export function ImageBanner({identifier}) {
+  const [bannerData, setBannerData] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchContent() {
+      const data = await getContentfulData(IMAGE_BANNER_QUERY, {
+        identifier: identifier
+      });
+      console.log('Image Banner Response:', data);
+      setBannerData(data?.imageBanner);
+      setLoading(false);
+    }
+
+    fetchContent();
+  }, [identifier]);
+
+  if (loading || !bannerData) {
+    return null;
+  }
+
+  // Early return if section should not be shown
+  if (!bannerData.showSection) {
+    return null;
+  }
+
+  const {image, ctaLabel, ctaLink} = bannerData;
+
+  return (
+    <div className="container mx-auto py-[16px]">
+      <div className="relative">
+        <img
+          src={image.url}
+          alt={image.description || ''}
+          width={image.width}
+          height={image.height}
+          className="w-full"
+        />
+
+        {ctaLabel && ctaLink && (
+          <Link
+            to={ctaLink}
+            className="absolute bottom-[32px] left-1/2 -translate-x-1/2 bg-black text-white text-[14px] font-[700] py-[10px] px-[22px] rounded-[3px] uppercase"
+          >
+            {ctaLabel}
+          </Link>
+        )}
       </div>
-    </section>
+    </div>
   );
 }
