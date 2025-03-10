@@ -28,7 +28,7 @@ export function PaginatedResourceSection({
               resourcesMarkup
             )}
             <NextLink
-              className='flex justify-center items-center mt-[12px] border border-black w-fit mx-auto uppercase text-[14px] min-w-[85px] px-[10px] py-[13px] rounded-[3px]'
+              className='flex justify-center items-center mt-[30px] border border-black w-fit mx-auto uppercase text-[14px] min-w-[85px] px-[10px] py-[13px] rounded-[3px]'
             >
               {isLoading ? 'Loading...' : <span>Load more</span>}
             </NextLink>
