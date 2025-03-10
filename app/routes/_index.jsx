@@ -49,8 +49,8 @@ export default function Homepage() {
 
       {/* Media with Text - Right + Image */}
 
-      <FourImages title="Shop Accessories" />
-      <FourImages title="Shop by Category" />
+      <FourImages identifier="72Hvj6QImGqnXrqYXsID5X" />
+      <FourImages identifier="2LMtpIS7680HhbaBj9ZKcP" />
 
       <ClearanceBanner identifier="5Ru67QydWtH5q8motcvxip" />
 
