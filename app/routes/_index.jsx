@@ -53,7 +53,7 @@ export default function Homepage() {
 
       <ClearanceBanner />
 
-      <MetaText />
+      <MetaText identifier="3d7pZrSMyMzRfQfxFmUAKa" />
     </div>
   );
 }

@@ -1,9 +1,51 @@
-export function MetaText() {
+import {useState, useEffect} from 'react';
+import {getContentfulData} from '~/lib/contentful';
+
+const META_TEXT_QUERY = `
+  query GetMetaText($identifier: String!) {
+    metaText(id: $identifier) {
+      text {
+        json
+      }
+      sys {
+        id
+      }
+    }
+  }
+`;
+
+export function MetaText({identifier}) {
+  const [text, setText] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchContent() {
+      console.log('Fetching with ID:', identifier);
+      const data = await getContentfulData(META_TEXT_QUERY, {
+        identifier: identifier
+      });
+      console.log('Contentful Raw Response:', data);
+
+      // Access the text content from the rich text field
+      setText(data?.metaText?.text?.json?.content?.[0]?.content?.[0]?.value || null);
+      setLoading(false);
+    }
+
+    fetchContent();
+  }, [identifier]);
+
+  if (loading || !text) {
+    return <div className="container mx-auto pt-[50px] pb-[16px]" />;
+  }
+
   return (
     <div className="container mx-auto pt-[50px] pb-[16px]">
-      <p className="text-[12px] text-center">
-        *VALID ON SELECT STYLES. ITEMS AS MARKED. NOT VALID WITH ANY OTHER OFFER. NOT VALID ON PREVIOUS PURCHASES. VALID FOR LIMITED TIME ONLY. *10% off PICKUP ORDERS NOT VALID WITH: BIRKENSTOCK, CHUBBIES, DICKIES, EDIKTED, FREE PEOPLE, HERSCHEL SUPPLY CO., JANSPORT, LEVI'S, NIKE, NIKE SB, RAINBOW SANDALS, STANLEY, STEVE MADDEN AND THE NORTH FACE MERCHANDISE.
-      </p>
+      <div 
+        className="text-[12px] text-center"
+        dangerouslySetInnerHTML={{
+          __html: text
+        }}
+      />
     </div>
   );
 }
