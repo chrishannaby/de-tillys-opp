@@ -30,7 +30,6 @@ export function PromoBanner({identifier}) {
       const data = await getContentfulData(PROMO_BANNER_QUERY, {
         identifier: identifier
       });
-      console.log('Promo Banner Response:', data);
       setBannerData(data?.promoBanner);
       setLoading(false);
     }

@@ -51,7 +51,6 @@ export function FourImages({identifier}) {
       const data = await getContentfulData(FOUR_IMAGES_QUERY, {
         identifier: identifier
       });
-      console.log('Four Images Response:', data);
       setSectionData(data?.fourImages);
       setLoading(false);
     }

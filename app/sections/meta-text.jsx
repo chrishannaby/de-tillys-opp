@@ -22,11 +22,9 @@ export function MetaText({identifier}) {
 
   useEffect(() => {
     async function fetchContent() {
-      console.log('Fetching with ID:', identifier);
       const data = await getContentfulData(META_TEXT_QUERY, {
         identifier: identifier
       });
-      console.log('Contentful Raw Response:', data);
 
       // Access the text content from the rich text field
       setText(data?.metaText?.text?.json?.content?.[0]?.content?.[0]?.value || null);

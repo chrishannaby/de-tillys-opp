@@ -49,7 +49,6 @@ export function TriBanner({identifier}) {
       const data = await getContentfulData(TRI_BANNER_QUERY, {
         identifier: identifier
       });
-      console.log('Tri Banner Response:', data);
       setBannerData(data?.triBanner);
       setLoading(false);
     }

@@ -30,7 +30,6 @@ export function ClearanceBanner({identifier}) {
       const data = await getContentfulData(CLEARANCE_BANNER_QUERY, {
         identifier: identifier
       });
-      console.log('Clearance Banner Response:', data);
       setBannerData(data?.clearanceBanner);
       setLoading(false);
     }

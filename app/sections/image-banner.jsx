@@ -30,7 +30,6 @@ export function ImageBanner({identifier}) {
       const data = await getContentfulData(IMAGE_BANNER_QUERY, {
         identifier: identifier
       });
-      console.log('Image Banner Response:', data);
       setBannerData(data?.imageBanner);
       setLoading(false);
     }
