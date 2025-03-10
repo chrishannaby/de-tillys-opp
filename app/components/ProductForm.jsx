@@ -88,7 +88,7 @@ export function ProductForm({product, productOptions, selectedVariant, descripti
                         ${exists && !selected ? ' link' : ''}
                         ${swatch?.color 
                           ? 'h-[32px] w-[32px] rounded-full overflow-hidden' 
-                          : 'min-w-[85px] py-[13px] px-0 border border-black rounded-[3px] text-[14px]'
+                          : 'min-w-[85px] px-[6px] py-[13px] border border-black rounded-[3px] text-[14px]'
                         }
                         ${selected && swatch?.color ? 'outline outline-2 outline-black outline-offset-3' : ''}
                       `}
