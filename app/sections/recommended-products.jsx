@@ -12,17 +12,28 @@ export function RecommendedProducts({products, title = "Recommended Products"}) 
 
       <Suspense fallback={<div>Loading...</div>}>
         <Await resolve={products}>
-          {(response) => (
-            <div className="grid grid-cols-6 gap-[30px]">
-              {response?.products.nodes.map((product, index) => (
-                <ProductItem
-                  key={product.id}
-                  product={product}
-                  loading={index < 2 ? 'eager' : undefined}
-                />
-              ))}
-            </div>
-          )}
+          {(response) => {
+            // Get all products
+            const allProducts = response?.products?.nodes || [];
+            if (allProducts.length === 0) return null;
+
+            // Randomly select 6 products
+            const randomProducts = allProducts
+              .sort(() => 0.5 - Math.random()) // Shuffle array
+              .slice(0, 6); // Take first 6
+
+            return (
+              <div className="grid grid-cols-6 gap-[30px]">
+                {randomProducts.map((product, index) => (
+                  <ProductItem
+                    key={product.id}
+                    product={product}
+                    loading={index < 2 ? 'eager' : undefined}
+                  />
+                ))}
+              </div>
+            );
+          }}
         </Await>
       </Suspense>
     </section>
@@ -84,7 +95,7 @@ const RECOMMENDED_PRODUCTS_QUERY = `#graphql
   }
   query RecommendedProducts ($country: CountryCode, $language: LanguageCode)
     @inContext(country: $country, language: $language) {
-    products(first: 6, sortKey: UPDATED_AT, reverse: true) {
+    products(first: 20, sortKey: UPDATED_AT, reverse: true) { # Fetch 20 products instead of 6
       nodes {
         ...RecommendedProduct
       }
