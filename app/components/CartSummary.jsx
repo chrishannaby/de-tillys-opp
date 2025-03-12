@@ -8,6 +8,44 @@ export function CartSummary({cart, layout}) {
   const className =
     layout === 'page' ? 'cart-summary-page' : 'cart-summary-aside';
 
+    const {originalSubtotal, totalSavings} = cart.lines?.nodes?.reduce(
+      (acc, line) => {
+        const discountTotal =
+          line.discountAllocations?.reduce((lineTotal, discount) => {
+            return lineTotal + Number(discount.discountedAmount?.amount || 0);
+          }, 0) || 0;
+  
+        const compareAtDiff = line.merchandise.compareAtPrice
+          ? (Number(line.merchandise.compareAtPrice.amount) -
+              Number(line.merchandise.price.amount)) *
+            line.quantity
+          : 0;
+  
+        const lineSavings = discountTotal + compareAtDiff;
+  
+        return {
+          totalSavings: acc.totalSavings + lineSavings,
+          originalSubtotal: acc.originalSubtotal + lineSavings,
+        };
+      },
+      {
+        totalSavings: 0,
+        originalSubtotal: Number(cart.cost?.subtotalAmount?.amount || 0),
+      },
+    ) || {
+      totalSavings: 0,
+      originalSubtotal: Number(cart.cost?.subtotalAmount?.amount || 0),
+    };
+  
+    const hasDiscount = cart.lines?.nodes?.some(
+      (line) =>
+        line.discountAllocations?.length > 0 ||
+        (line.merchandise.compareAtPrice &&
+          Number(line.merchandise.compareAtPrice.amount) >
+            Number(line.merchandise.price.amount)),
+    );
+
+
   return (
     <div className='min-w-[300px]'>
       <h4 className='text-[16px] font-[700] mb-[20px] pb-[10px] border-b border-black'>
@@ -15,14 +53,19 @@ export function CartSummary({cart, layout}) {
       </h4>
 
       <div className='flex flex-col gap-[24px]'>
-        {cart.cost?.subtotalAmount && (
+        {originalSubtotal && (
           <div className='flex justify-between text-[16px] font-[500]'>
             <p>
               Subtotal
             </p>
 
             <span>
-              <Money data={cart.cost.subtotalAmount} />
+              <Money 
+                data={{
+                  currencyCode: cart.cost?.totalTaxAmount?.currencyCode || 'USD',
+                  amount: String(originalSubtotal)
+                }}
+              />
             </span>
           </div>
         )}
@@ -33,9 +76,41 @@ export function CartSummary({cart, layout}) {
           </p>
 
           <span>
-            $0.00
+            {!cart.cost?.totalTaxAmount?.amount || Number(cart.cost.totalTaxAmount.amount) === 0 ? (
+              <Money 
+                data={{
+                  currencyCode: cart.cost?.totalTaxAmount?.currencyCode || 'USD',
+                  amount: '0.00'
+                }}
+              />
+            ) : (
+              <Money 
+                data={{
+                  currencyCode: cart.cost?.totalTaxAmount,
+                  amount: '0.00'
+                }}
+              />
+            )}
           </span>
         </div>
+
+        {hasDiscount && totalSavings > 0 && (
+          <div className='flex justify-between text-[16px] font-[500]'>
+            <p>
+              Savings
+            </p>
+
+            <span>
+            <Money
+              data={{
+                currencyCode:
+                  cart.cost?.subtotalAmount?.currencyCode || 'USD',
+                amount: String(totalSavings),
+              }}
+            />
+            </span>
+          </div>
+        )}
 
         {cart.cost?.totalAmount && (
           <div className='flex justify-between text-[16px] font-[500]'>
