@@ -68,7 +68,6 @@ export function CartLineItem({layout, line, index}) {
         />
       </div>
 
-
       <div className='flex gap-[10px] border border-black p-[10px] h-fit max-w-[260px] mr-[50px]'>
         <input 
           type="radio"
@@ -94,9 +93,16 @@ export function CartLineItem({layout, line, index}) {
         <p className='mb-[6px] text-[12px] font-[400]'>
           Total
         </p>
-
+      
         {line?.cost?.totalAmount ? (
-          <Money className="text-[12px] font-[400]" data={line.cost.totalAmount} />
+          <>
+            {line?.cost?.subtotalAmount && line.cost.subtotalAmount.amount > line.cost.totalAmount.amount && (
+              <s className="block">
+                <Money className="text-[12px] font-[400]" data={line.cost.subtotalAmount} />
+              </s>
+            )}
+            <Money className="text-[12px] font-[400]" data={line.cost.totalAmount} />
+          </>
         ) : (
           <span>&nbsp;</span>
         )}

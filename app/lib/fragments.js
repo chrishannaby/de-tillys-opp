@@ -12,6 +12,9 @@ export const CART_QUERY_FRAGMENT = `#graphql
       value
     }
     cost {
+      subtotalAmount {
+        ...Money
+      }
       totalAmount {
         ...Money
       }
@@ -20,6 +23,12 @@ export const CART_QUERY_FRAGMENT = `#graphql
       }
       compareAtAmountPerQuantity {
         ...Money
+      }
+    }
+    discountAllocations {
+      discountedAmount {
+        amount
+        currencyCode
       }
     }
     merchandise {
