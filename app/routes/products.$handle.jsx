@@ -1,4 +1,6 @@
-import {useLoaderData, Link} from '@remix-run/react';
+import {useLoaderData, Link, Await} from '@remix-run/react';
+import {Suspense} from 'react';
+import {defer, json} from '@shopify/remix-oxygen';
 import {
   getSelectedProductOptions,
   Analytics,
@@ -14,6 +16,9 @@ import {useState, useEffect} from 'react';
 import {Image} from '@shopify/hydrogen';
 import {RecommendedProducts} from '~/sections/recommended-products';
 import {RECOMMENDED_PRODUCTS_QUERY} from '~/sections/recommended-products';
+import {ProductReviews} from '~/components/ProductReviews';
+
+const REVIEWS_ENDPOINT = 'https://chrishannaby-getfootwearreviews.web.val.run';
 
 /**
  * @type {MetaFunction<typeof loader>}
@@ -31,22 +36,7 @@ export const meta = ({data}) => {
 /**
  * @param {LoaderFunctionArgs} args
  */
-export async function loader(args) {
-  // Start fetching non-critical data without blocking time to first byte
-  const deferredData = loadDeferredData(args);
-
-  // Await the critical data required to render initial state of the page
-  const criticalData = await loadCriticalData(args);
-
-  return {...deferredData, ...criticalData};
-}
-
-/**
- * Load data necessary for rendering content above the fold. This is the critical data
- * needed to render the page. If it's unavailable, the whole page should 400 or 500 error.
- * @param {LoaderFunctionArgs}
- */
-async function loadCriticalData({context, params, request}) {
+export async function loader({context, params, request}) {
   const {handle} = params;
   const {storefront} = context;
 
@@ -54,9 +44,24 @@ async function loadCriticalData({context, params, request}) {
     throw new Error('Expected product handle to be defined');
   }
 
+  const reviewsResponse = await fetch(`${REVIEWS_ENDPOINT}/?handle=${handle}`);
+  const reviews = {
+    data: await reviewsResponse.json(),
+  };
+
+  const recommendedProducts = await context.storefront
+    .query(RECOMMENDED_PRODUCTS_QUERY)
+    .catch((error) => {
+      console.error(error);
+      return null;
+    });
+
   const [{product}] = await Promise.all([
     storefront.query(PRODUCT_QUERY, {
-      variables: {handle, selectedOptions: getSelectedProductOptions(request)},
+      variables: {
+        handle,
+        selectedOptions: getSelectedProductOptions(request),
+      },
     }),
     // Add other queries here, so that they are loaded in parallel
   ]);
@@ -65,40 +70,25 @@ async function loadCriticalData({context, params, request}) {
     throw new Response(null, {status: 404});
   }
 
-  return {
+  return json({
     product,
-  };
-}
-
-/**
- * Load data for rendering content below the fold. This data is deferred and will be
- * fetched after the initial page load. If it's unavailable, the page should still 200.
- * Make sure to not throw any errors here, as it will cause the page to 500.
- * @param {LoaderFunctionArgs}
- */
-function loadDeferredData({context}) {
-  const recommendedProducts = context.storefront
-    .query(RECOMMENDED_PRODUCTS_QUERY)
-    .catch((error) => {
-      console.error(error);
-      return null;
-    });
-
-  return {
     recommendedProducts,
-  };
+    reviews,
+  });
 }
 
 export default function Product() {
   /** @type {LoaderReturnData} */
-  const {product, recommendedProducts} = useLoaderData();
-  
+  const {product, recommendedProducts, reviews} = useLoaderData();
+
   // Use useEffect to update selectedImage when product changes
   useEffect(() => {
     setSelectedImage(product.selectedOrFirstAvailableVariant?.image);
   }, [product.id]); // Reset when product ID changes
 
-  const [selectedImage, setSelectedImage] = useState(product.selectedOrFirstAvailableVariant?.image);
+  const [selectedImage, setSelectedImage] = useState(
+    product.selectedOrFirstAvailableVariant?.image,
+  );
 
   // Optimistically selects a variant with given available variant information
   const selectedVariant = useOptimisticVariant(
@@ -121,21 +111,8 @@ export default function Product() {
   return (
     <div className="container mx-auto">
       <div className="flex items-center gap-[8px] text-[11px] font-[400] py-[20px] px-[8px]">
-        <Link to="/">
-          Home
-        </Link>
-
-        /
-
-        <Link to="/collections/all">
-          Collection
-        </Link>
-
-        /
-
-        <span>
-          {title}
-        </span>
+        <Link to="/">Home</Link>/<Link to="/collections/all">Collection</Link>/
+        <span>{title}</span>
       </div>
 
       <div className="product gap-[48px] mb-[16px]">
@@ -147,7 +124,9 @@ export default function Product() {
                 key={image.id}
                 onClick={() => setSelectedImage(image)}
                 className={`w-[80px] h-[100px] overflow-hidden cursor-pointer hover:border-2 hover:border-black ${
-                  selectedImage?.id === image.id ? 'border border-black' : 'border border-gray-200'
+                  selectedImage?.id === image.id
+                    ? 'border border-black'
+                    : 'border border-gray-200'
                 }`}
               >
                 <Image
@@ -162,16 +141,14 @@ export default function Product() {
           </div>
 
           {/* Main Product Image */}
-          <ProductImage 
+          <ProductImage
             image={selectedImage || selectedVariant?.image}
             className="flex-1"
           />
         </div>
-        
+
         <div className="product-main">
-          <h1 className="text-[28px] font-[700] mb-[8px]">
-            {title}
-          </h1>
+          <h1 className="text-[28px] font-[700] mb-[8px]">{title}</h1>
 
           <ProductPrice
             price={selectedVariant?.price}
@@ -200,6 +177,16 @@ export default function Product() {
             ],
           }}
         />
+      </div>
+      <div className="container mx-auto px-4 py-8">
+        <h2 className="text-[18.4px] font-[700] my-[16px] text-center">
+          Reviews
+        </h2>
+        <Suspense fallback={<div>Loading...</div>}>
+          <Await resolve={reviews}>
+            {(reviews) => <ProductReviews reviews={reviews.data} />}
+          </Await>
+        </Suspense>
       </div>
 
       <RecommendedProducts products={recommendedProducts} />

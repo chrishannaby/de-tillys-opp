@@ -1,4 +1,4 @@
-import {createHydrogenContext} from '@shopify/hydrogen';
+import {createHydrogenContext, createWithCache} from '@shopify/hydrogen';
 import {AppSession} from '~/lib/session';
 import {CART_QUERY_FRAGMENT} from '~/lib/fragments';
 
@@ -35,8 +35,11 @@ export async function createAppLoadContext(request, env, executionContext) {
     },
   });
 
+  const withCache = createWithCache({cache, waitUntil, request});
+
   return {
     ...hydrogenContext,
+    withCache,
     // declare additional Remix loader context
   };
 }
