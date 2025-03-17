@@ -155,7 +155,7 @@ export default function Product() {
                   data={image}
                   loading="lazy"
                   sizes="80px"
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-contain"
                 />
               </button>
             ))}

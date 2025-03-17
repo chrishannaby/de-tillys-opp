@@ -13,10 +13,10 @@ export function ProductImage({image}) {
     <div className="product-image w-full">
       <Image
         alt={image.altText || 'Product Image'}
-        aspectRatio="7/9"
         data={image}
         key={image.id}
         sizes="(min-width: 45em) 50vw, 100vw"
+        className="w-full h-full object-contain !aspect-[7/9]"
       />
     </div>
   );

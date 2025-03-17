@@ -43,11 +43,10 @@ export function ProductItem({product, loading}) {
         {product.featuredImage && (
           <Image
             alt={product.featuredImage.altText || product.title}
-            aspectRatio="4/5"
             data={product.featuredImage}
             loading={loading}
             sizes="(min-width: 45em) 400px, 100vw"
-            className={`transition-opacity duration-200 ${
+            className={`transition-opacity duration-200 !aspect-[4/5] h-full object-contain ${
               isHovered && hasSecondImage ? 'opacity-0' : 'opacity-100'
             }`}
           />
@@ -56,11 +55,10 @@ export function ProductItem({product, loading}) {
         {hasSecondImage && (
           <Image
             alt={secondImage.altText || product.title}
-            aspectRatio="4/5"
             data={secondImage}
             loading={loading}
             sizes="(min-width: 45em) 400px, 100vw"
-            className={`absolute top-0 left-0 w-full h-full transition-opacity duration-200 ${
+            className={`absolute top-0 left-0 w-full h-full transition-opacity duration-200 !aspect-[4/5] object-contain ${
               isHovered ? 'opacity-100' : 'opacity-0'
             }`}
           />

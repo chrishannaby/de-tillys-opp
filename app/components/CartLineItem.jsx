@@ -26,12 +26,9 @@ export function CartLineItem({layout, line, index}) {
       {image && (
         <Image
           alt={title}
-          aspectRatio="4/5"
           data={image}
-          height={128}
           loading="lazy"
-          width={100}
-          className='w-[100px] h-[128px] object-cover mr-[16px]'
+          className='w-full h-full max-w-[100px] max-h-[128px] object-contain mr-[16px] !aspect-[4/5]'
         />
       )}
 
