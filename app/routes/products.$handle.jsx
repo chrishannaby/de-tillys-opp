@@ -15,6 +15,9 @@ import {Image} from '@shopify/hydrogen';
 import {RecommendedProducts} from '~/sections/recommended-products';
 import {RECOMMENDED_PRODUCTS_QUERY} from '~/sections/recommended-products';
 
+const publicStoreDomain =
+  'https://tillys-7b0d80a77a65c1c9e9ae.o2.myshopify.dev/';
+
 /**
  * @type {MetaFunction<typeof loader>}
  */
@@ -92,13 +95,15 @@ function loadDeferredData({context}) {
 export default function Product() {
   /** @type {LoaderReturnData} */
   const {product, recommendedProducts} = useLoaderData();
-  
+
   // Use useEffect to update selectedImage when product changes
   useEffect(() => {
     setSelectedImage(product.selectedOrFirstAvailableVariant?.image);
   }, [product.id]); // Reset when product ID changes
 
-  const [selectedImage, setSelectedImage] = useState(product.selectedOrFirstAvailableVariant?.image);
+  const [selectedImage, setSelectedImage] = useState(
+    product.selectedOrFirstAvailableVariant?.image,
+  );
 
   // Optimistically selects a variant with given available variant information
   const selectedVariant = useOptimisticVariant(
@@ -121,21 +126,8 @@ export default function Product() {
   return (
     <div className="container mx-auto">
       <div className="flex items-center gap-[8px] text-[11px] font-[400] py-[20px] px-[8px]">
-        <Link to="/">
-          Home
-        </Link>
-
-        /
-
-        <Link to="/collections/all">
-          Collection
-        </Link>
-
-        /
-
-        <span>
-          {title}
-        </span>
+        <Link to="/">Home</Link>/<Link to="/collections/all">Collection</Link>/
+        <span>{title}</span>
       </div>
 
       <div className="product gap-[48px] mb-[16px]">
@@ -147,7 +139,9 @@ export default function Product() {
                 key={image.id}
                 onClick={() => setSelectedImage(image)}
                 className={`w-[80px] h-[100px] overflow-hidden cursor-pointer hover:border-2 hover:border-black ${
-                  selectedImage?.id === image.id ? 'border border-black' : 'border border-gray-200'
+                  selectedImage?.id === image.id
+                    ? 'border border-black'
+                    : 'border border-gray-200'
                 }`}
               >
                 <Image
@@ -162,16 +156,14 @@ export default function Product() {
           </div>
 
           {/* Main Product Image */}
-          <ProductImage 
+          <ProductImage
             image={selectedImage || selectedVariant?.image}
             className="flex-1"
           />
         </div>
-        
+
         <div className="product-main">
-          <h1 className="text-[28px] font-[700] mb-[8px]">
-            {title}
-          </h1>
+          <h1 className="text-[28px] font-[700] mb-[8px]">{title}</h1>
 
           <ProductPrice
             price={selectedVariant?.price}
@@ -183,6 +175,7 @@ export default function Product() {
             productOptions={productOptions}
             selectedVariant={selectedVariant}
             descriptionHtml={descriptionHtml}
+            storeDomain={publicStoreDomain}
           />
         </div>
         <Analytics.ProductView
